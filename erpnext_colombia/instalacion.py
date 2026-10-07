@@ -22,6 +22,9 @@ def configurar():
 
 	for empresa in empresas_con_puc():
 		aplicar_a_empresa(empresa)
+	from erpnext_colombia.estados_financieros import sincronizar_plantillas
+
+	sincronizar_plantillas()
 	frappe.clear_cache()
 
 

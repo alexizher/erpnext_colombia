@@ -42,6 +42,9 @@ def empresa_prueba() -> str:
 			"Account", {"company": EMPRESA, "account_number": ("like", "2335%"), "is_group": 0}, order_by="account_number"
 		)
 		frappe.db.set_value("Company", EMPRESA, "stock_received_but_not_billed", srbnb)
+	if frappe.db.get_value("Company", EMPRESA, "enable_perpetual_inventory"):
+		# Contabilidad externa: el inventario se registra con asientos, no con movimientos de stock.
+		frappe.db.set_value("Company", EMPRESA, "enable_perpetual_inventory", 0)
 	for anio in ("2025", "2026"):
 		if not frappe.db.exists("Fiscal Year", anio):
 			frappe.get_doc(
