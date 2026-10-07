@@ -293,4 +293,5 @@ doc_events = {
 	"Purchase Invoice": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
 	"Payment Entry": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
 	"Journal Entry": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
+	"Account": {"after_insert": "erpnext_colombia.cuentas.al_crear_cuenta"},
 }

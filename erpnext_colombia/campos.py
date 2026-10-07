@@ -14,4 +14,14 @@ CAMPOS = {
 	"Customer": [_tercero("customer_name")],
 	"Supplier": [_tercero("supplier_name")],
 	"Company": [{**_tercero("tax_id"), "reqd": 0}],
+	"Account": [
+		{
+			"fieldname": "co_clasificacion_niif",
+			"label": "Clasificación NIIF",
+			"fieldtype": "Select",
+			"options": "\nCorriente\nNo corriente",
+			"insert_after": "account_type",
+			"description": "Corriente o no corriente en el estado de situación financiera.",
+		}
+	],
 }

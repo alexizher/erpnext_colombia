@@ -18,6 +18,10 @@ def after_migrate():
 def configurar():
 	create_custom_fields(CAMPOS, update=True)
 	crear_dimension()
+	from erpnext_colombia.cuentas import aplicar_a_empresa, empresas_con_puc
+
+	for empresa in empresas_con_puc():
+		aplicar_a_empresa(empresa)
 	frappe.clear_cache()
 
 
