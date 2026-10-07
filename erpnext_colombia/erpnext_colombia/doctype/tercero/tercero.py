@@ -1,21 +1,23 @@
+import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
 
 from erpnext_colombia.nit import codigo_tipo, digito_verificacion, limpiar_numero
 
+# "900.123.456-7": el último dígito después de un guion es el de verificación.
+DV_CON_GUION = re.compile(r"^\s*(.*\d)\s*-\s*(\d)\s*$")
+DOCTYPES_CON_TERCERO = ("Customer", "Supplier", "Company")
+
 
 class Tercero(Document):
 	def autoname(self):
-		self.numero_documento = limpiar_numero(self.numero_documento, self.tipo_documento)
-		if not self.numero_documento:
-			frappe.throw(_("Falta el número de documento."))
+		self._preparar_numero()
 		self.name = self.numero_documento
 
 	def validate(self):
-		self.numero_documento = limpiar_numero(self.numero_documento, self.tipo_documento)
-		if not self.numero_documento:
-			frappe.throw(_("Falta el número de documento."))
+		self._preparar_numero()
 		es_nit = codigo_tipo(self.tipo_documento) == "31"
 		if not self.naturaleza:
 			self.naturaleza = "Persona jurídica" if es_nit else "Persona natural"
@@ -25,28 +27,67 @@ class Tercero(Document):
 			self.digito_verificacion = None
 		self._validar_nombres()
 		self.nombre_completo = self._armar_nombre()
-		self.nit_completo = (
-			f"{self.numero_documento}-{self.digito_verificacion}" if es_nit else self.numero_documento
-		)
+		self.nit_completo = self._nit_completo()
+
+	def on_update(self):
+		self._propagar_nit()
+
+	def before_rename(self, old, new, merge=False):
+		numero = new
+		if codigo_tipo(self.tipo_documento) == "31" and (m := DV_CON_GUION.match(new or "")):
+			numero = m.group(1)
+		numero = limpiar_numero(numero, self.tipo_documento)
+		if not numero:
+			frappe.throw(_("Falta el número de documento."))
+		return numero
 
 	def after_rename(self, old, new, merge=False):
-		self.db_set("numero_documento", new)
+		self.numero_documento = new
 		if codigo_tipo(self.tipo_documento) == "31":
-			dv = digito_verificacion(new)
-			self.db_set("digito_verificacion", str(dv))
-			self.db_set("nit_completo", f"{new}-{dv}")
-		else:
-			self.db_set("nit_completo", new)
+			self.digito_verificacion = str(digito_verificacion(new))
+		self.nit_completo = self._nit_completo()
+		self.db_set(
+			{
+				"numero_documento": new,
+				"digito_verificacion": self.digito_verificacion,
+				"nit_completo": self.nit_completo,
+			}
+		)
+		self._propagar_nit()
+
+	def _preparar_numero(self):
+		if codigo_tipo(self.tipo_documento) == "31" and (m := DV_CON_GUION.match(self.numero_documento or "")):
+			numero, dv = m.groups()
+			if self.digito_verificacion in (None, ""):
+				self.digito_verificacion = dv
+			elif str(self.digito_verificacion) != dv:
+				frappe.throw(
+					_("El número trae el dígito {0} después del guion y el campo dígito de verificación dice {1}.").format(
+						dv, self.digito_verificacion
+					)
+				)
+			self.numero_documento = numero
+		self.numero_documento = limpiar_numero(self.numero_documento, self.tipo_documento)
+		if not self.numero_documento:
+			frappe.throw(_("Falta el número de documento."))
+
+	def _nit_completo(self):
+		if codigo_tipo(self.tipo_documento) == "31":
+			return f"{self.numero_documento}-{self.digito_verificacion}"
+		return self.numero_documento
+
+	def _propagar_nit(self):
+		"""Clientes, proveedores y empresas enlazados muestran el NIT del tercero en tax_id."""
+		from erpnext_colombia.membrete import generar_membrete
+
+		for doctype in DOCTYPES_CON_TERCERO:
+			for nombre in frappe.get_all(doctype, filters={"co_tercero": self.name}, pluck="name"):
+				frappe.db.set_value(doctype, nombre, "tax_id", self.nit_completo, update_modified=False)
+				if doctype == "Company":
+					generar_membrete(nombre)
 
 	def _validar_digito(self):
 		numero = self.numero_documento
-		if len(numero) == 10 and int(numero[-1]) == digito_verificacion(numero[:-1]):
-			frappe.throw(
-				_(
-					"El número {0} parece traer el dígito de verificación al final. "
-					"Escriba {1} en el número; el dígito de verificación va en su propio campo."
-				).format(numero, numero[:-1])
-			)
 		calculado = str(digito_verificacion(numero))
 		if self.digito_verificacion not in (None, "") and str(self.digito_verificacion) != calculado:
 			frappe.throw(

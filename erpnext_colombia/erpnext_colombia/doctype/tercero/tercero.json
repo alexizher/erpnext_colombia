@@ -1,7 +1,6 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "prompt",
  "creation": "2026-10-07 00:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -37,7 +36,8 @@
    "in_standard_filter": 1,
    "label": "Número de documento",
    "reqd": 1,
-   "set_only_once": 1
+   "set_only_once": 1,
+   "unique": 1
   },
   {
    "depends_on": "eval:doc.tipo_documento && doc.tipo_documento.startsWith('31')",
@@ -45,13 +45,15 @@
    "fieldname": "digito_verificacion",
    "fieldtype": "Data",
    "label": "Dígito de verificación",
-   "length": 1
+   "length": 1,
+   "allow_in_quick_entry": 1
   },
   {
    "fieldname": "naturaleza",
    "fieldtype": "Select",
    "label": "Naturaleza",
-   "options": "\nPersona jurídica\nPersona natural"
+   "options": "\nPersona jurídica\nPersona natural",
+   "allow_in_quick_entry": 1
   },
   {
    "fieldname": "column_break_ident",
@@ -81,20 +83,23 @@
    "fieldname": "razon_social",
    "fieldtype": "Data",
    "label": "Razón social",
-   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona jurídica'"
+   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona jurídica'",
+   "allow_in_quick_entry": 1
   },
   {
    "depends_on": "eval:doc.naturaleza == 'Persona natural'",
    "fieldname": "primer_apellido",
    "fieldtype": "Data",
    "label": "Primer apellido",
-   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona natural'"
+   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona natural'",
+   "allow_in_quick_entry": 1
   },
   {
    "depends_on": "eval:doc.naturaleza == 'Persona natural'",
    "fieldname": "segundo_apellido",
    "fieldtype": "Data",
-   "label": "Segundo apellido"
+   "label": "Segundo apellido",
+   "allow_in_quick_entry": 1
   },
   {
    "fieldname": "column_break_nombres",
@@ -105,22 +110,24 @@
    "fieldname": "primer_nombre",
    "fieldtype": "Data",
    "label": "Primer nombre",
-   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona natural'"
+   "mandatory_depends_on": "eval:doc.naturaleza == 'Persona natural'",
+   "allow_in_quick_entry": 1
   },
   {
    "depends_on": "eval:doc.naturaleza == 'Persona natural'",
    "fieldname": "otros_nombres",
    "fieldtype": "Data",
-   "label": "Otros nombres"
+   "label": "Otros nombres",
+   "allow_in_quick_entry": 1
   }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-07 00:00:00.000000",
+ "modified": "2026-10-07 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Colombia",
  "name": "Tercero",
- "naming_rule": "Set by user",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
