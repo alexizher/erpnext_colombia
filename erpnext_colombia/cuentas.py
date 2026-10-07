@@ -1,6 +1,6 @@
 import frappe
 
-PUC = "Colombia PUC"
+PLANTILLAS_PUC = ("Colombia PUC", "Colombia PUC Simple")
 DIMENSION = "Tercero"
 PREFIJOS_CORRIENTES = ("11", "12", "13", "14", "21", "22", "23", "24", "25", "26", "28")
 PREFIJOS_NO_CORRIENTES = ("15", "16", "17", "18", "19", "27")
@@ -22,12 +22,16 @@ def exige_tercero(numero) -> bool:
 
 
 def empresas_con_puc() -> list[str]:
-	return frappe.get_all("Company", filters={"chart_of_accounts": PUC}, pluck="name")
+	"""Empresas con el PUC colombiano: por la plantilla elegida o, si se crearon a partir de otra
+	empresa (chart_of_accounts vacío), porque tienen la cuenta 1105 (Caja) numerada."""
+	por_plantilla = frappe.get_all("Company", filters={"chart_of_accounts": ("in", PLANTILLAS_PUC)}, pluck="name")
+	por_cuenta = frappe.get_all("Account", filters={"account_number": "1105"}, pluck="company", distinct=True)
+	return sorted(set(por_plantilla) | set(por_cuenta))
 
 
 def aplicar_a_empresa(empresa: str) -> None:
 	if empresa not in empresas_con_puc():
-		frappe.logger("erpnext_colombia").info(f"{empresa} no usa {PUC}; se salta")
+		frappe.logger("erpnext_colombia").info(f"{empresa} no usa el PUC colombiano; se salta")
 		return
 	cuentas = frappe.get_all(
 		"Account",
@@ -39,7 +43,10 @@ def aplicar_a_empresa(empresa: str) -> None:
 			valor = clasificacion_por_defecto(c.account_number, c.root_type)
 			if valor:
 				frappe.db.set_value("Account", c.name, "co_clasificacion_niif", valor, update_modified=False)
-	_asegurar_filtro(empresa, [c.name for c in cuentas if exige_tercero(c.account_number)])
+	# El filtro se arma completo solo la primera vez. Después lo mantiene al_crear_cuenta, y las
+	# cuentas que Daniela quite no vuelven a entrar en cada migración.
+	if not frappe.db.exists("Accounting Dimension Filter", {"company": empresa, "accounting_dimension": DIMENSION}):
+		_asegurar_filtro(empresa, [c.name for c in cuentas if exige_tercero(c.account_number)])
 
 
 def _asegurar_filtro(empresa: str, cuentas: list[str]) -> None:

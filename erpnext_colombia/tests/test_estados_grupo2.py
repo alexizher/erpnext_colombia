@@ -95,3 +95,12 @@ class TestEstadosGrupo2(IntegrationTestCase):
 			self.assertEqual(valores(filas, "Otros activos corrientes")[1], 100_000)
 		finally:
 			je.cancel()
+
+	def test_cuenta_sin_clasificacion_cuenta_como_corriente(self):
+		caja = frappe.db.get_value("Account", {"company": self.empresa, "account_number": "111005"})
+		frappe.db.set_value("Account", caja, "co_clasificacion_niif", None)
+		try:
+			filas = ejecutar(ESF2, self.empresa)
+			self.assertEqual(valores(filas, "Total activo"), [18_100_000, 19_550_000])
+		finally:
+			frappe.db.set_value("Account", caja, "co_clasificacion_niif", "Corriente")

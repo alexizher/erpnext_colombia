@@ -91,3 +91,29 @@ class TestCuentas(IntegrationTestCase):
 		self.assertNotIn(nombre, empresas_con_puc())
 		aplicar_a_empresa(nombre)
 		self.assertFalse(frappe.db.exists("Accounting Dimension Filter", {"company": nombre}))
+
+	def test_migrar_no_vuelve_a_meter_una_cuenta_quitada_del_filtro(self):
+		nombre = frappe.db.get_value("Accounting Dimension Filter", {"company": self.empresa})
+		filtro = frappe.get_doc("Accounting Dimension Filter", nombre)
+		quitada = cuenta("236540")
+		filtro.accounts = [f for f in filtro.accounts if f.applicable_on_account != quitada]
+		filtro.save()
+		aplicar_a_empresa(self.empresa)
+		self.assertFalse(("tercero", quitada) in get_dimension_filter_map(), "la cuenta quitada volvió al filtro")
+
+	def test_una_empresa_con_error_no_bloquea_la_migracion(self):
+		from unittest.mock import patch
+
+		from erpnext_colombia.instalacion import configurar
+
+		with patch("erpnext_colombia.cuentas.aplicar_a_empresa", side_effect=Exception("dato malo")):
+			configurar()
+		self.assertTrue(frappe.db.exists("Error Log", {"error": ("like", "%dato malo%")}))
+
+	def test_empresa_con_cuentas_del_puc_se_reconoce_aunque_no_diga_la_plantilla(self):
+		# Empresa creada a partir de otra existente: chart_of_accounts queda vacío.
+		frappe.db.set_value("Company", self.empresa, "chart_of_accounts", None)
+		try:
+			self.assertIn(self.empresa, empresas_con_puc())
+		finally:
+			frappe.db.set_value("Company", self.empresa, "chart_of_accounts", "Colombia PUC")

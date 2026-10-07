@@ -18,10 +18,14 @@ def after_migrate():
 def configurar():
 	create_custom_fields(CAMPOS, update=True)
 	crear_dimension()
-	from erpnext_colombia.cuentas import aplicar_a_empresa, empresas_con_puc
+	from erpnext_colombia import cuentas
 
-	for empresa in empresas_con_puc():
-		aplicar_a_empresa(empresa)
+	for empresa in cuentas.empresas_con_puc():
+		# Un dato malo de una empresa no puede bloquear la migración del sitio.
+		try:
+			cuentas.aplicar_a_empresa(empresa)
+		except Exception:
+			frappe.log_error(title=f"erpnext_colombia: no se pudo configurar {empresa}")
 	from erpnext_colombia.estados_financieros import sincronizar_plantillas
 
 	sincronizar_plantillas()

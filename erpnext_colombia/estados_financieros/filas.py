@@ -47,7 +47,12 @@ def prefijos(*incluir, excluir=(), clasificacion=None, raiz=None):
 	condiciones += [
 		{"or": [["account_number", "not like", f"{p}%"], ["account_number", "is", "not set"]]} for p in excluir
 	]
-	if clasificacion:
+	if clasificacion == "Corriente":
+		# Una cuenta sin clasificación se presenta como corriente; si no, desaparecería del balance.
+		condiciones.append(
+			{"or": [["co_clasificacion_niif", "=", clasificacion], ["co_clasificacion_niif", "is", "not set"]]}
+		)
+	elif clasificacion:
 		condiciones.append(["co_clasificacion_niif", "=", clasificacion])
 	if raiz:
 		condiciones.append(["root_type", "in", list(raiz)] if isinstance(raiz, tuple) else ["root_type", "=", raiz])
