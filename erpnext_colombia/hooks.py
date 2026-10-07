@@ -272,3 +272,21 @@ app_license = "gpl-3.0"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+after_install = "erpnext_colombia.instalacion.after_install"
+after_migrate = "erpnext_colombia.instalacion.after_migrate"
+before_tests = "erpnext_colombia.tests.utils.preparar_sitio"
+
+doc_events = {
+	"Customer": {
+		"before_insert": "erpnext_colombia.partes.antes_de_insertar",
+		"validate": "erpnext_colombia.partes.validar_parte",
+	},
+	"Supplier": {
+		"before_insert": "erpnext_colombia.partes.antes_de_insertar",
+		"validate": "erpnext_colombia.partes.validar_parte",
+	},
+	"Company": {
+		"validate": "erpnext_colombia.partes.validar_empresa",
+	},
+}
