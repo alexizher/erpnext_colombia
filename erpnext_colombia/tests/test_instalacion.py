@@ -17,3 +17,12 @@ class TestInstalacion(IntegrationTestCase):
 		for doctype in ("Customer", "Supplier", "Company"):
 			n = frappe.db.count("Custom Field", {"dt": doctype, "fieldname": "co_tercero"})
 			self.assertEqual(n, 1, doctype)
+
+	def test_configurar_dos_veces_deja_una_dimension(self):
+		from erpnext_colombia.instalacion import configurar
+
+		configurar()
+		configurar()
+		self.assertEqual(frappe.db.count("Accounting Dimension", {"document_type": "Tercero"}), 1)
+		self.assertTrue(frappe.get_meta("GL Entry").has_field("tercero"))
+		self.assertTrue(frappe.get_meta("Journal Entry Account").has_field("tercero"))

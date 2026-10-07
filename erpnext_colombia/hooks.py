@@ -289,4 +289,8 @@ doc_events = {
 	"Company": {
 		"validate": "erpnext_colombia.partes.validar_empresa",
 	},
+	"Sales Invoice": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
+	"Purchase Invoice": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
+	"Payment Entry": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
+	"Journal Entry": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
 }
