@@ -13,8 +13,12 @@ def blanco():
 	return {"data_source": "Blank Line"}
 
 
-def cuentas(codigo, texto, filtro, saldo=CIERRE, invertir=False, nivel=1):
+CONSULTAS = "erpnext_colombia.estados_financieros.consultas"
+
+
+def cuentas(codigo, texto, filtro, saldo=CIERRE, invertir=False, nivel=1, oculto=False):
 	return {
+		"hidden_calculation": 1 if oculto else 0,
 		"reference_code": codigo,
 		"display_name": texto,
 		"data_source": "Account Data",
@@ -23,6 +27,18 @@ def cuentas(codigo, texto, filtro, saldo=CIERRE, invertir=False, nivel=1):
 		"reverse_sign": 1 if invertir else 0,
 		"indentation_level": nivel,
 		"hide_when_empty": 0,
+	}
+
+
+def api(codigo, texto, funcion, nivel=1, oculto=False):
+	"""Fila calculada por una función de estados_financieros.consultas."""
+	return {
+		"reference_code": codigo,
+		"display_name": texto,
+		"data_source": "Custom API",
+		"calculation_formula": f"{CONSULTAS}.{funcion}",
+		"indentation_level": nivel,
+		"hidden_calculation": 1 if oculto else 0,
 	}
 
 

@@ -104,3 +104,51 @@ class TestEstadosGrupo2(IntegrationTestCase):
 			self.assertEqual(valores(filas, "Total activo"), [18_100_000, 19_550_000])
 		finally:
 			frappe.db.set_value("Account", caja, "co_clasificacion_niif", "Corriente")
+
+	def test_cierre_anual_mantiene_el_balance_cuadrado(self):
+		pcv = frappe.get_doc(
+			{
+				"doctype": "Period Closing Voucher",
+				"company": self.empresa,
+				"fiscal_year": "2025",
+				"period_start_date": "2025-01-01",
+				"period_end_date": "2025-12-31",
+				"transaction_date": "2025-12-31",
+				"closing_account_head": frappe.db.get_value("Account", {"company": self.empresa, "account_number": "3605"}),
+				"remarks": "Cierre 2025",
+			}
+		)
+		pcv.insert()
+		pcv.submit()
+		try:
+			esf = ejecutar(ESF2, self.empresa)
+			self.assertEqual(valores(esf, "Total activo"), valores(esf, "Total pasivo y patrimonio"))
+			self.assertEqual(valores(esf, "Resultado del ejercicio"), [1_100_000, 2_450_000])
+			self.assertEqual(valores(esf, "Resultados de ejercicios anteriores"), [0, 1_100_000])
+			self.assertEqual(valores(ejecutar(ECP2, self.empresa), "Total patrimonio al final"), valores(esf, "Total patrimonio"))
+		finally:
+			pcv.reload()
+			pcv.cancel()
+
+	def test_flujo_cuadra_con_amortizacion_venta_de_activo_y_reserva(self):
+		t = nuevo_tercero("800197268", "DIAN")
+		movimientos = [
+			[("171020", 600_000, 0), ("111005", 0, 600_000)],  # pago de un cargo diferido
+			[("516515", 200_000, 0), ("171020", 0, 200_000)],  # amortización
+			[("111005", 3_500_000, 0), ("159205", 150_000, 0), ("151605", 0, 3_000_000), ("424516", 0, 650_000)],  # venta de un activo
+			[("3605", 100_000, 0), ("330505", 0, 100_000)],  # apropiación de reserva legal
+		]
+		hechos = []
+		try:
+			for lineas in movimientos:
+				hechos.append(
+					asiento(self.empresa, "2026-07-01", [{"cuenta": c, "debe": d, "haber": h} for c, d, h in lineas], tercero=t)
+				)
+			efe = ejecutar(EFE2, self.empresa)
+			esf = ejecutar(ESF2, self.empresa)
+			self.assertEqual(valores(efe, "Diferencia por conciliar"), [0, 0])
+			self.assertEqual(valores(efe, "Efectivo al final del periodo"), valores(esf, "Efectivo y equivalentes al efectivo"))
+			self.assertEqual(valores(efe, "Aumento (disminución) neto del efectivo")[1], 1_950_000 - 600_000 + 3_500_000)
+		finally:
+			for je in reversed(hechos):
+				je.cancel()

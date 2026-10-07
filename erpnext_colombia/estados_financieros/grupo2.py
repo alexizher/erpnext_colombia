@@ -1,6 +1,7 @@
 from erpnext_colombia.estados_financieros.filas import (
 	APERTURA,
 	MOVIMIENTO,
+	api,
 	blanco,
 	cuentas,
 	formula,
@@ -10,7 +11,6 @@ from erpnext_colombia.estados_financieros.filas import (
 
 C, NC = "Corriente", "No corriente"
 RESULTADO = prefijos(raiz=("Income", "Expense"))
-DEPRECIACIONES = ("5160", "5165", "5260", "5265")
 ACUMULADAS = ("1592", "1597", "1598", "1599", "1698", "1699")
 
 SITUACION_FINANCIERA = {
@@ -64,8 +64,12 @@ SITUACION_FINANCIERA = {
 		cuentas("K32", "Superávit de capital", prefijos("32"), invertir=True),
 		cuentas("K33", "Reservas", prefijos("33"), invertir=True),
 		cuentas("K34", "Revalorización del patrimonio", prefijos("34"), invertir=True),
-		cuentas("K36", "Resultados de ejercicios anteriores", prefijos("36", "37"), invertir=True),
-		cuentas("KRE", "Resultado del ejercicio", RESULTADO, invertir=True),
+		# Ver estados_financieros.consultas: con o sin cierre anual, el resultado del ejercicio es el
+		# del estado de resultados y lo demás va en ejercicios anteriores.
+		cuentas("K36C", "Cuentas 36 y 37", prefijos("36", "37"), invertir=True, oculto=True),
+		api("KUSC", "Resultados sin cerrar", "resultado_sin_cerrar", oculto=True),
+		api("KRE", "Resultado del ejercicio", "resultado_del_periodo"),
+		formula("K36", "Resultados de ejercicios anteriores", "K36C + KUSC - KRE"),
 		cuentas("K38", "Superávit por valorizaciones", prefijos("38"), invertir=True),
 		cuentas(
 			"K99",
@@ -106,16 +110,20 @@ RESULTADO_INTEGRAL = {
 	],
 }
 
+OTRAS_CLASES = tuple(f"1{d}" for d in range(1, 10)) + tuple(f"2{d}" for d in range(1, 10)) + ("8", "9")
+
 FLUJOS_DE_EFECTIVO = {
 	"name": "CO Grupo 2 - Flujos de efectivo",
 	"report_type": "Cash Flow",
 	"rows": [
 		titulo("Actividades de operación"),
 		cuentas("F01", "Resultado del periodo", RESULTADO, saldo=MOVIMIENTO, invertir=True),
-		cuentas("F02", "Depreciaciones y amortizaciones", prefijos(*DEPRECIACIONES), saldo=MOVIMIENTO),
+		# Se toman de las contrapartidas acumuladas (1592, 1597...) y no del gasto: así cuadran también
+		# las bajas de activos y la amortización de diferidos, que se abona directo a la 17.
+		cuentas("F02", "Depreciaciones, amortizaciones y deterioro", prefijos(*ACUMULADAS), saldo=MOVIMIENTO, invertir=True),
 		cuentas("F03", "(Aumento) disminución en deudores", prefijos("13"), saldo=MOVIMIENTO, invertir=True),
 		cuentas("F04", "(Aumento) disminución en inventarios", prefijos("14"), saldo=MOVIMIENTO, invertir=True),
-		cuentas("F05", "(Aumento) disminución en gastos pagados por anticipado", prefijos("17"), saldo=MOVIMIENTO, invertir=True),
+		cuentas("F05", "(Aumento) disminución en diferidos y pagos anticipados", prefijos("17"), saldo=MOVIMIENTO, invertir=True),
 		cuentas(
 			"F06",
 			"Aumento (disminución) en pasivos de operación",
@@ -123,30 +131,42 @@ FLUJOS_DE_EFECTIVO = {
 			saldo=MOVIMIENTO,
 			invertir=True,
 		),
-		formula("FOP", "Efectivo neto de actividades de operación", "F01 + F02 + F03 + F04 + F05 + F06", negrita=True),
+		cuentas(
+			"F07",
+			"Otras partidas de activo y pasivo",
+			prefijos(excluir=OTRAS_CLASES, raiz=("Asset", "Liability")),
+			saldo=MOVIMIENTO,
+			invertir=True,
+		),
+		formula("FOP", "Efectivo neto de actividades de operación", "F01 + F02 + F03 + F04 + F05 + F06 + F07", negrita=True),
 		titulo("Actividades de inversión"),
 		cuentas(
 			"F11",
-			"Inversiones y adquisición de propiedad, planta y equipo e intangibles",
-			prefijos("12", "15", "16", "18", excluir=ACUMULADAS),
+			"Inversiones y propiedad, planta y equipo, intangibles y otros activos",
+			prefijos("12", "15", "16", "18", "19", excluir=ACUMULADAS),
 			saldo=MOVIMIENTO,
 			invertir=True,
 		),
 		formula("FIN", "Efectivo neto de actividades de inversión", "F11", negrita=True),
 		titulo("Actividades de financiación"),
-		cuentas("F21", "Obligaciones financieras", prefijos("21"), saldo=MOVIMIENTO, invertir=True),
+		cuentas("F21", "Obligaciones financieras y bonos", prefijos("21", "29"), saldo=MOVIMIENTO, invertir=True),
 		cuentas(
 			"F22",
-			"Aportes de capital y otros movimientos del patrimonio",
-			prefijos("31", "32", "33", "35"),
+			"Aportes, reservas y otros movimientos del patrimonio",
+			prefijos(excluir=("36", "37"), raiz="Equity"),
 			saldo=MOVIMIENTO,
 			invertir=True,
 		),
-		formula("FFI", "Efectivo neto de actividades de financiación", "F21 + F22", negrita=True),
+		api("F23", "Movimientos de resultados acumulados", "movimiento_resultados_acumulados_sin_cierre"),
+		formula("FFI", "Efectivo neto de actividades de financiación", "F21 + F22 + F23", negrita=True),
 		blanco(),
 		formula("FNET", "Aumento (disminución) neto del efectivo", "FOP + FIN + FFI", negrita=True),
+		# En reportes sin valores acumulados el motor devuelve como "Closing Balance" el movimiento del
+		# año; el saldo final se arma con la apertura más el movimiento real de la caja.
 		cuentas("F31", "Efectivo al inicio del periodo", prefijos("11"), saldo=APERTURA),
-		formula("F32", "Efectivo al final del periodo", "F31 + FNET", negrita=True),
+		cuentas("F3M", "Movimiento de la caja", prefijos("11"), saldo=MOVIMIENTO, oculto=True),
+		formula("F32", "Efectivo al final del periodo", "F31 + F3M", negrita=True),
+		formula("F33", "Diferencia por conciliar", "F3M - FNET"),
 	],
 }
 
@@ -165,17 +185,39 @@ COMPONENTES = [
 	("C32", "Superávit de capital", prefijos("32")),
 	("C33", "Reservas", prefijos("33")),
 	("C34", "Revalorización del patrimonio", prefijos("34")),
-	("C36", "Resultados de ejercicios anteriores", prefijos("36", "37")),
-	("CRE", "Resultado del ejercicio", RESULTADO),
 	("C38", "Superávit por valorizaciones", prefijos("38")),
 	("C99", "Otras partidas del patrimonio", prefijos(excluir=("31", "32", "33", "34", "36", "37", "38"), raiz="Equity")),
+]
+
+RESULTADOS_ACUMULADOS = prefijos("36", "37")
+
+# Resultados: cuentas 36 y 37 más lo que aún no pasó a patrimonio con un cierre anual.
+COMPONENTE_RESULTADOS = [
+	cuentas("CR_IA", "Cuentas 36 y 37 al inicio", RESULTADOS_ACUMULADOS, saldo=APERTURA, invertir=True, oculto=True),
+	api("CR_IU", "Resultados sin cerrar al inicio", "resultado_sin_cerrar_al_inicio", oculto=True),
+	formula("CR_I", "Resultados acumulados - saldo inicial", "CR_IA + CR_IU"),
+	api("CR_E", "Resultado del ejercicio", "resultado_del_periodo", nivel=2),
+	cuentas("CR_MA", "Movimiento de las cuentas 36 y 37", RESULTADOS_ACUMULADOS, saldo=MOVIMIENTO, invertir=True, oculto=True),
+	{**formula("CR_FA", "Cuentas 36 y 37 al final", "CR_IA + CR_MA"), "hidden_calculation": 1},
+	api("CR_FU", "Resultados sin cerrar al final", "resultado_sin_cerrar", oculto=True),
+	formula("CR_F", "Resultados acumulados - saldo final", "CR_FA + CR_FU", negrita=True),
+	formula("CR_M", "Resultados acumulados - movimiento del periodo", "CR_F - CR_I"),
+	blanco(),
 ]
 
 CAMBIOS_EN_EL_PATRIMONIO = {
 	"name": "CO Grupo 2 - Cambios en el patrimonio",
 	"report_type": "Custom Financial Statement",
 	"rows": [fila for codigo, texto, filtro in COMPONENTES for fila in _componente(codigo, texto, filtro)]
-	+ [formula("CTOT", "Total patrimonio al final", " + ".join(f"{c}_F" for c, _t, _f in COMPONENTES), negrita=True)],
+	+ COMPONENTE_RESULTADOS
+	+ [
+		formula(
+			"CTOT",
+			"Total patrimonio al final",
+			" + ".join([f"{c}_F" for c, _t, _f in COMPONENTES] + ["CR_F"]),
+			negrita=True,
+		)
+	],
 }
 
 PLANTILLAS = [SITUACION_FINANCIERA, RESULTADO_INTEGRAL, FLUJOS_DE_EFECTIVO, CAMBIOS_EN_EL_PATRIMONIO]
