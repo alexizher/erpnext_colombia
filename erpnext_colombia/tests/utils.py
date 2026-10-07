@@ -45,6 +45,10 @@ def empresa_prueba() -> str:
 	if frappe.db.get_value("Company", EMPRESA, "enable_perpetual_inventory"):
 		# Contabilidad externa: el inventario se registra con asientos, no con movimientos de stock.
 		frappe.db.set_value("Company", EMPRESA, "enable_perpetual_inventory", 0)
+	# ERPNext guarda el valor en memoria por proceso (erpnext.is_perpetual_inventory_enabled); en la suite
+	# completa otro módulo pudo leerlo antes del cambio.
+	frappe.clear_document_cache("Company", EMPRESA)
+	getattr(frappe.local, "enable_perpetual_inventory", {}).pop(EMPRESA, None)
 	for anio in ("2025", "2026"):
 		if not frappe.db.exists("Fiscal Year", anio):
 			frappe.get_doc(
