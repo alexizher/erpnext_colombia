@@ -43,7 +43,10 @@ def prefijos(*incluir, excluir=(), clasificacion=None, raiz=None):
 	if incluir:
 		opciones = [["account_number", "like", f"{p}%"] for p in incluir]
 		condiciones.append(opciones[0] if len(opciones) == 1 else {"or": opciones})
-	condiciones += [["account_number", "not like", f"{p}%"] for p in excluir]
+	# En SQL, NULL NOT LIKE '11%' no es verdadero: una cuenta sin número quedaría fuera de los "Otros".
+	condiciones += [
+		{"or": [["account_number", "not like", f"{p}%"], ["account_number", "is", "not set"]]} for p in excluir
+	]
 	if clasificacion:
 		condiciones.append(["co_clasificacion_niif", "=", clasificacion])
 	if raiz:
