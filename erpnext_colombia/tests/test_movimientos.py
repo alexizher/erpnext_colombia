@@ -123,3 +123,40 @@ class TestMovimientos(IntegrationTestCase):
 		frappe.rename_doc("Tercero", t, "900123451", force=True)
 		self.assertTrue(all(g.tercero == "900123451" for g in gl(je.name)))
 		self.assertEqual(frappe.db.get_value("Tercero", "900123451", "numero_documento"), "900123451")
+
+	def test_cambiar_el_cliente_en_un_borrador_cambia_el_tercero(self):
+		c1 = cliente("890903938", "Bancolombia S.A.")
+		c2 = cliente("899999068", "Ecopetrol S.A.")
+		si = frappe.get_doc(
+			{
+				"doctype": "Sales Invoice",
+				"company": self.empresa,
+				"customer": c1,
+				"posting_date": "2026-03-17",
+				"set_posting_time": 1,
+				"currency": "COP",
+				"debit_to": cuenta("130505"),
+				"items": [
+					{"item_code": "SERV-CO", "qty": 1, "rate": 1000, "income_account": cuenta("413595"), "cost_center": self.cc}
+				],
+			}
+		).insert()
+		si.customer = c2
+		si.save()
+		self.assertEqual(si.tercero, "899999068")
+
+	def test_cambiar_la_parte_de_una_linea_del_asiento_cambia_su_tercero(self):
+		s1 = proveedor("860034313", "Banco Davivienda S.A.")
+		s2 = proveedor("890903938", "Bancolombia S.A.")
+		je = asiento(
+			self.empresa,
+			"2026-03-18",
+			[
+				{"cuenta": "519595", "debe": 3000, "tercero": "860034313"},
+				{"cuenta": "2205", "haber": 3000, "party_type": "Supplier", "party": s1},
+			],
+			enviar=False,
+		)
+		je.accounts[1].party = s2
+		je.save()
+		self.assertEqual(je.accounts[1].tercero, "890903938")
