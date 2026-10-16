@@ -1,0 +1,34 @@
+{
+ "actions": [],
+ "creation": "2026-10-15 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["obligacion", "anio", "periodo", "segmento", "column_break_1", "cifras", "digito_desde", "digito_hasta", "fecha", "section_break_1", "fuente", "corregida_a_mano"],
+ "fields": [
+  {"fieldname": "obligacion", "fieldtype": "Link", "options": "Obligacion Tributaria", "label": "Obligación", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1},
+  {"fieldname": "anio", "fieldtype": "Int", "label": "Año", "reqd": 1, "in_list_view": 1, "in_standard_filter": 1, "description": "Año en que vence."},
+  {"fieldname": "periodo", "fieldtype": "Data", "label": "Periodo", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "segmento", "fieldtype": "Select", "label": "Segmento", "options": "Todos\nGran contribuyente\nPersona jurídica\nPersona natural", "default": "Todos", "reqd": 1, "in_standard_filter": 1},
+  {"fieldname": "column_break_1", "fieldtype": "Column Break"},
+  {"fieldname": "cifras", "fieldtype": "Select", "label": "Dígitos que mira la regla", "options": "1\n2", "default": "1", "reqd": 1},
+  {"fieldname": "digito_desde", "fieldtype": "Int", "label": "Desde el dígito", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "digito_hasta", "fieldtype": "Int", "label": "Hasta el dígito", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "fecha", "fieldtype": "Date", "label": "Fecha", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "section_break_1", "fieldtype": "Section Break"},
+  {"fieldname": "fuente", "fieldtype": "Data", "label": "Fuente", "description": "Decreto y artículo, o comunicado de la DIAN."},
+  {"fieldname": "corregida_a_mano", "fieldtype": "Check", "label": "Corregida a mano", "read_only": 1, "description": "La carga de fechas de la app no cambia esta fila."}
+ ],
+ "modified": "2026-10-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "Fecha Tributaria",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1},
+  {"create": 1, "read": 1, "report": 1, "role": "Accounts Manager", "write": 1}
+ ],
+ "sort_field": "fecha",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

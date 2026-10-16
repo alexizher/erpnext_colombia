@@ -1,0 +1,27 @@
+{
+ "actions": [],
+ "autoname": "field:nombre",
+ "creation": "2026-10-15 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["nombre", "formulario", "responsabilidad_rut", "tiene_pago"],
+ "fields": [
+  {"fieldname": "nombre", "fieldtype": "Data", "label": "Nombre", "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "formulario", "fieldtype": "Data", "label": "Formulario", "in_list_view": 1},
+  {"fieldname": "responsabilidad_rut", "fieldtype": "Data", "label": "Responsabilidad RUT", "in_list_view": 1},
+  {"default": "1", "fieldname": "tiene_pago", "fieldtype": "Check", "label": "Tiene pago"}
+ ],
+ "modified": "2026-10-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "Obligacion Tributaria",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1},
+  {"read": 1, "report": 1, "role": "Accounts User"}
+ ],
+ "sort_field": "nombre",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

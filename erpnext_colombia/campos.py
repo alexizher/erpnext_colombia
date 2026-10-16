@@ -11,7 +11,37 @@ def _tercero(insert_after):
 
 
 CAMPOS = {
-	"Customer": [_tercero("customer_name")],
+	"Customer": [
+		_tercero("customer_name"),
+		{
+			"fieldname": "co_seccion_obligaciones",
+			"label": "Obligaciones tributarias",
+			"fieldtype": "Section Break",
+			"insert_after": "co_tercero",
+			"collapsible": 1,
+		},
+		{
+			"fieldname": "co_gran_contribuyente",
+			"label": "Gran contribuyente",
+			"fieldtype": "Check",
+			"insert_after": "co_seccion_obligaciones",
+		},
+		{
+			"fieldname": "co_empresa_contable",
+			"label": "Empresa en este sistema",
+			"fieldtype": "Link",
+			"options": "Company",
+			"insert_after": "co_gran_contribuyente",
+			"description": "Solo si se le lleva la contabilidad aquí.",
+		},
+		{
+			"fieldname": "co_obligaciones",
+			"label": "Obligaciones",
+			"fieldtype": "Table",
+			"options": "Obligacion del Cliente",
+			"insert_after": "co_empresa_contable",
+		},
+	],
 	"Supplier": [_tercero("supplier_name")],
 	"Company": [
 		{**_tercero("tax_id"), "reqd": 0},
@@ -34,14 +64,23 @@ CAMPOS = {
 			"fieldtype": "Data",
 			"insert_after": "co_representante_legal",
 		},
-		{"fieldname": "co_contador", "label": "Contador", "fieldtype": "Data", "insert_after": "co_representante_legal_documento"},
+		{
+			"fieldname": "co_contador",
+			"label": "Contador",
+			"fieldtype": "Data",
+			"insert_after": "co_representante_legal_documento",
+		},
 		{
 			"fieldname": "co_contador_tarjeta_profesional",
 			"label": "Tarjeta profesional del contador",
 			"fieldtype": "Data",
 			"insert_after": "co_contador",
 		},
-		{"fieldname": "co_columna_revisor", "fieldtype": "Column Break", "insert_after": "co_contador_tarjeta_profesional"},
+		{
+			"fieldname": "co_columna_revisor",
+			"fieldtype": "Column Break",
+			"insert_after": "co_contador_tarjeta_profesional",
+		},
 		{
 			"fieldname": "co_revisor_fiscal",
 			"label": "Revisor fiscal",

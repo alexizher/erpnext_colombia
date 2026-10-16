@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.utils import getdate
 
 TIPO_ERPNEXT = {"Persona jurídica": "Company", "Persona natural": "Individual"}
 CAMPO_NOMBRE = {"Customer": "customer_name", "Supplier": "supplier_name"}
@@ -33,6 +34,22 @@ def validar_parte(doc, method=None):
 				doc.co_tercero, NOMBRE_PARTE[doc.doctype], otro
 			)
 		)
+	if doc.doctype == "Customer":
+		_validar_obligaciones(doc)
+
+
+def _validar_obligaciones(doc):
+	vistas = set()
+	for fila in doc.get("co_obligaciones") or []:
+		if fila.obligacion in vistas:
+			frappe.throw(_("La obligación {0} está dos veces. Deje una sola fila.").format(fila.obligacion))
+		vistas.add(fila.obligacion)
+		if fila.hasta and getdate(fila.hasta) < getdate(fila.desde):
+			frappe.throw(
+				_("En {0}, la fecha hasta ({1}) es anterior a la fecha desde ({2}).").format(
+					fila.obligacion, fila.hasta, fila.desde
+				)
+			)
 
 
 def validar_empresa(doc, method=None):
