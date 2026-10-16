@@ -25,16 +25,21 @@ def abrir_todos(hoy=None) -> int:
 			},
 		):
 			continue
-		assign_to._add(
-			{
-				"assign_to": [usuario],
-				"doctype": "Vencimiento",
-				"name": v.name,
-				"date": v.fecha_vencimiento,
-				"description": _("Vence {0}: {1}").format(v.fecha_vencimiento, v.titulo),
-			},
-			ignore_permissions=True,
-		)
+		try:
+			assign_to._add(
+				{
+					"assign_to": [usuario],
+					"doctype": "Vencimiento",
+					"name": v.name,
+					"date": v.fecha_vencimiento,
+					"description": _("Vence {0}: {1}").format(v.fecha_vencimiento, v.titulo),
+				},
+				ignore_permissions=True,
+			)
+		except Exception:
+			# Un usuario mal configurado no puede dejar sin ToDo a los demás vencimientos.
+			frappe.log_error(title=f"Vencimientos: no se pudo asignar {v.name} a {usuario}")
+			continue
 		creados += 1
 	return creados
 

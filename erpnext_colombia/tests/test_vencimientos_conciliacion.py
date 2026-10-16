@@ -119,3 +119,44 @@ class TestConciliacion(IntegrationTestCase):
 		with patch("erpnext_colombia.vencimientos.generacion.generar") as g:
 			c = cliente_con("900300410", "Con Diez S.A.S.", obligacion())
 		g.assert_called_with(cliente=c)
+
+	def test_no_aplica_manual_tras_cierre_del_sistema_no_se_reabre(self):
+		c = cliente_con("900300411", "Con Once S.A.S.", obligacion())
+		generar(cliente=c, anio=2030)
+		cliente_con("900300411", "Con Once S.A.S.", [])
+		generar(cliente=c, anio=2030)
+		v = frappe.get_doc("Vencimiento", vencimientos_de(c, periodo="Abril de 2030")[0].name)
+		v.estado = "Pendiente"
+		v.save()
+		v.estado = "No aplica"
+		v.save()
+		cliente_con("900300411", "Con Once S.A.S.", obligacion())
+		generar(cliente=c, anio=2030)
+		self.assertEqual(vencimientos_de(c, periodo="Abril de 2030")[0].estado, "No aplica")
+
+	def test_problema_de_datos_no_cierra_los_abiertos(self):
+		c = cliente_con("900300412", "Con Doce S.A.S.", obligacion())
+		generar(cliente=c, anio=2030)
+		frappe.db.set_value("Tercero", "900300412", "numero_documento", "SINDIGITOS")
+		problemas = generar(cliente=c, anio=2030)
+		self.assertTrue(any("dígitos" in p for p in problemas), problemas)
+		self.assertTrue(all(v.estado == "Pendiente" for v in vencimientos_de(c)))
+
+	def test_falla_a_mitad_de_un_cliente_no_deja_escrituras_parciales(self):
+		from erpnext_colombia.vencimientos import generacion
+
+		c = cliente_con("900300413", "Con Trece S.A.S.", obligacion())
+		frappe.db.delete("Vencimiento", {"cliente": c})
+		original = generacion._crear
+		creados = []
+
+		def falla_en_la_segunda(cliente, f):
+			creados.append(f.name)
+			if len(creados) == 2:
+				raise RuntimeError("dato malo")
+			return original(cliente, f)
+
+		with patch("erpnext_colombia.vencimientos.generacion._crear", side_effect=falla_en_la_segunda):
+			problemas = generar(cliente=c, anio=2030)
+		self.assertTrue(any("Con Trece" in p for p in problemas), problemas)
+		self.assertEqual(vencimientos_de(c), [])

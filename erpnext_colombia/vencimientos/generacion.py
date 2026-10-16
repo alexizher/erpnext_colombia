@@ -12,9 +12,12 @@ def generar(cliente: str | None = None, anio: int | None = None) -> list[str]:
 	clientes = [cliente] if cliente else _clientes_a_revisar()
 	problemas = []
 	for c in clientes:
+		frappe.db.savepoint("vencimientos_cliente")
 		try:
 			problemas += generar_cliente(c, anios)
 		except Exception:
+			# Un cliente que falla a mitad de camino no deja escrituras a medias.
+			frappe.db.rollback(save_point="vencimientos_cliente")
 			frappe.log_error(title=f"Vencimientos: no se pudo generar {c}")
 			nombre = frappe.db.get_value("Customer", c, "customer_name") or c
 			problemas.append(_("{0}: error al generar sus vencimientos (ver Error Log).").format(nombre))
@@ -35,24 +38,28 @@ def generar_cliente(cliente: str, anios: list[int]) -> list[str]:
 	problemas = []
 	aplican = {}
 	if not c.disabled:
-		aplican, problemas = _fechas_que_aplican(c, anios)
+		aplican, problemas, bloqueado = _fechas_que_aplican(c, anios)
+		if bloqueado:
+			# Sin NIT utilizable no se sabe qué aplica: cerrar sus vencimientos sería perder avisos.
+			return problemas
 	_conciliar(c.name, anios, aplican)
 	return problemas
 
 
 def _fechas_que_aplican(c, anios):
-	"""Devuelve {(obligacion, anio, periodo): fila de Fecha Tributaria} y los problemas de datos del cliente."""
+	"""Devuelve {(obligacion, anio, periodo): fila de Fecha Tributaria}, los problemas de datos del cliente y si
+	alguno impide saber qué le aplica."""
 	problemas = []
 	aplican = {}
 	if not c.get("co_obligaciones"):
-		return aplican, problemas
+		return aplican, problemas, False
 	t = (
 		frappe.db.get_value("Tercero", c.co_tercero, ["numero_documento", "naturaleza"], as_dict=True)
 		if c.co_tercero
 		else None
 	)
 	if not t:
-		return aplican, [_("{0}: no tiene tercero.").format(c.customer_name)]
+		return aplican, [_("{0}: no tiene tercero.").format(c.customer_name)], True
 	seg = segmento(c.co_gran_contribuyente, t.naturaleza)
 	for fila in c.co_obligaciones:
 		for anio in anios:
@@ -87,7 +94,7 @@ def _fechas_que_aplican(c, anios):
 							c.customer_name, t.numero_documento
 						)
 					)
-					return aplican, problemas
+					return aplican, problemas, True
 				if not f.digito_desde <= d <= f.digito_hasta:
 					continue
 				if getdate(f.fecha) < getdate(fila.desde):
@@ -95,7 +102,7 @@ def _fechas_que_aplican(c, anios):
 				if fila.hasta and getdate(f.fecha) > getdate(fila.hasta):
 					continue
 				aplican.setdefault((f.obligacion, f.anio, f.periodo), f)
-	return aplican, problemas
+	return aplican, problemas, False
 
 
 def _conciliar(cliente: str, anios: list[int], aplican: dict):
@@ -150,6 +157,7 @@ def _cambiar_estado(nombre: str, estado: str, por_sistema: int, motivo: str):
 	doc = frappe.get_doc("Vencimiento", nombre)
 	doc.estado = estado
 	doc.cerrado_por_sistema = por_sistema
+	doc.flags.por_sistema = True
 	doc.save(ignore_permissions=True)
 	doc.add_comment("Comment", motivo)
 

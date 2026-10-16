@@ -42,3 +42,7 @@ class TestVistas(IntegrationTestCase):
 		self.assertEqual([r.mount_on for r in riel], ["erpnext"])
 		items = frappe.get_all("Dock Item", filters={"parent": riel[0].name}, pluck="link_to")
 		self.assertEqual(items, ["Vencimientos"])
+
+	def test_la_barra_abre_en_la_misma_pestana(self):
+		barra = frappe.get_doc("Sidebar", "Vencimientos")
+		self.assertEqual([i.label for i in barra.items if i.open_in_new_tab], [])

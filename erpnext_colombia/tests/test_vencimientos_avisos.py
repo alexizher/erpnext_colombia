@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import today
@@ -61,3 +63,21 @@ class TestAvisos(IntegrationTestCase):
 		v.save()
 		abrir_todos(hoy="2030-08-01")
 		self.assertEqual(todos_abiertos(self.julio), [])
+
+	def test_un_todo_que_falla_no_detiene_a_los_demas(self):
+		from frappe.desk.form import assign_to
+
+		original = assign_to._add
+		llamadas = []
+
+		def falla_la_primera(args, **kw):
+			llamadas.append(args["name"])
+			if len(llamadas) == 1:
+				raise frappe.PermissionError("sin permiso")
+			return original(args, **kw)
+
+		with patch("frappe.desk.form.assign_to._add", side_effect=falla_la_primera):
+			abrir_todos(hoy="2030-09-01")
+		abiertos = todos_abiertos(self.julio) + todos_abiertos(self.agosto)
+		self.assertGreaterEqual(len(llamadas), 2)
+		self.assertEqual(len(abiertos), 1)

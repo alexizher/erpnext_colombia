@@ -26,6 +26,9 @@ class Vencimiento(Document):
 		)
 		if otro:
 			frappe.throw(_("Ya existe {0} para este cliente, obligación y periodo.").format(otro))
+		if not self.is_new() and not self.flags.por_sistema and self.has_value_changed("estado"):
+			# Un cambio de estado a mano es de Daniela: la conciliación ya no puede reabrirlo.
+			self.cerrado_por_sistema = 0
 		if self.estado == "Presentada" and not self.fecha_presentacion:
 			self.fecha_presentacion = today()
 		self.titulo = f"{self.cliente_nombre or self.cliente} · {self.obligacion} {self.periodo}"

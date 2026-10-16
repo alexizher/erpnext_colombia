@@ -18,7 +18,7 @@
    "label": "Inicio",
    "link_to": "Vencimientos",
    "link_type": "Dashboard",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -34,7 +34,7 @@
    "label": "Vencimientos",
    "link_to": "Vencimiento",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -50,7 +50,7 @@
    "label": "Clientes",
    "link_to": "Customer",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -66,7 +66,7 @@
    "label": "Vencimientos por cliente",
    "link_to": "Vencimientos por Cliente",
    "link_type": "Report",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -81,7 +81,7 @@
    "keep_closed": 1,
    "label": "Configuraci\u00f3n",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Section Break"
   },
@@ -97,7 +97,7 @@
    "label": "Fechas tributarias",
    "link_to": "Fecha Tributaria",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -113,7 +113,7 @@
    "label": "Obligaciones",
    "link_to": "Obligacion Tributaria",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   },
@@ -129,12 +129,12 @@
    "label": "Configuraci\u00f3n de vencimientos",
    "link_to": "Configuracion de Vencimientos",
    "link_type": "DocType",
-   "open_in_new_tab": 1,
+   "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
   }
  ],
- "modified": "2026-10-16 09:48:14.006619",
+ "modified": "2026-10-16 10:13:55.456319",
  "modified_by": "Administrator",
  "module": "Vencimientos",
  "name": "Vencimientos",

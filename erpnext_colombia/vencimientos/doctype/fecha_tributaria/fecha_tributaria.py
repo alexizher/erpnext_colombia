@@ -4,6 +4,8 @@ from frappe.model.document import Document
 
 from erpnext_colombia.vencimientos.fechas import clave_fecha
 
+CAMPOS_DE_LA_REGLA = ("anio", "periodo", "segmento", "cifras", "digito_desde", "digito_hasta", "fecha")
+
 
 class FechaTributaria(Document):
 	def autoname(self):
@@ -24,8 +26,12 @@ class FechaTributaria(Document):
 					self.digito_desde, self.digito_hasta
 				)
 			)
-		if not self.is_new() and not self.flags.desde_sincronizacion and self.has_value_changed("fecha"):
+		if not self.is_new() and not self.flags.desde_sincronizacion and self._cambio_la_regla():
 			self.corregida_a_mano = 1
+
+	def _cambio_la_regla(self) -> bool:
+		"""Cualquier cambio a la regla (no a la fuente) es una corrección que la carga de fechas debe respetar."""
+		return any(self.has_value_changed(c) for c in CAMPOS_DE_LA_REGLA)
 
 	def on_update(self):
 		antes = self.get_doc_before_save()

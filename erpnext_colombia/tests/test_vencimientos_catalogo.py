@@ -56,6 +56,16 @@ class TestCatalogo(IntegrationTestCase):
 		self.assertEqual(str(frappe.db.get_value("Fecha Tributaria", nombre, "fecha")), "2031-07-14")
 		self.assertFalse(frappe.db.get_value("Fecha Tributaria", nombre, "corregida_a_mano"))
 
+	def test_sincronizar_no_pisa_un_rango_corregido_a_mano(self):
+		fechas.sincronizar_fechas(carpeta_con([fila("Julio de 2031", "2031-08-12")]))
+		nombre = fechas.clave_fecha(fila("Julio de 2031", "2031-08-12"))
+		f = frappe.get_doc("Fecha Tributaria", nombre)
+		f.digito_hasta = 9
+		f.save()
+		self.assertTrue(f.corregida_a_mano)
+		fechas.sincronizar_fechas(carpeta_con([fila("Julio de 2031", "2031-08-12")]))
+		self.assertEqual(frappe.db.get_value("Fecha Tributaria", nombre, "digito_hasta"), 9)
+
 	def test_nombres_de_doctype_traducidos(self):
 		frappe.local.lang = "es"
 		frappe.local.lang_full_dict = None
