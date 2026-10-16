@@ -29,6 +29,9 @@ def configurar():
 	from erpnext_colombia.estados_financieros import sincronizar_plantillas
 
 	sincronizar_plantillas()
+	from erpnext_colombia.vencimientos import instalacion as vencimientos
+
+	vencimientos.configurar()
 	frappe.clear_cache()
 
 
