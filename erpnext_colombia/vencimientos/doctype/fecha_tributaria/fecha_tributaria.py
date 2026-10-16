@@ -26,3 +26,10 @@ class FechaTributaria(Document):
 			)
 		if not self.is_new() and not self.flags.desde_sincronizacion and self.has_value_changed("fecha"):
 			self.corregida_a_mano = 1
+
+	def on_update(self):
+		antes = self.get_doc_before_save()
+		if antes and str(antes.fecha) != str(self.fecha):
+			from erpnext_colombia.vencimientos.generacion import propagar_fecha
+
+			propagar_fecha(self, antes.fecha)

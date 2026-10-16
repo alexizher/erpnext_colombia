@@ -104,15 +104,27 @@ def _conciliar(cliente: str, anios: list[int], aplican: dict):
 		for v in frappe.get_all(
 			"Vencimiento",
 			filters={"cliente": cliente, "anio": ("in", anios)},
-			fields=["name", "obligacion", "anio", "periodo", "estado", "cerrado_por_sistema"],
+			fields=[
+				"name",
+				"obligacion",
+				"anio",
+				"periodo",
+				"estado",
+				"cerrado_por_sistema",
+				"fecha_tributaria",
+			],
 		)
 	}
 	for clave, f in aplican.items():
 		v = existentes.get(clave)
 		if not v:
 			_crear(cliente, f)
-		elif v.estado == "No aplica" and v.cerrado_por_sistema:
+			continue
+		if v.estado == "No aplica" and v.cerrado_por_sistema:
 			_cambiar_estado(v.name, "Pendiente", 0, _("Vuelve a aplicar a este cliente."))
+			v.estado = "Pendiente"
+		if v.estado in ABIERTOS and v.fecha_tributaria != f.name:
+			_mover(v.name, f, _("Cambió la regla que le aplica: ahora vence el {0}.").format(f.fecha))
 	for clave, v in existentes.items():
 		if clave not in aplican and v.estado in ABIERTOS:
 			_cambiar_estado(v.name, "No aplica", 1, _("Ya no aplica a este cliente según su ficha."))
@@ -140,3 +152,22 @@ def _cambiar_estado(nombre: str, estado: str, por_sistema: int, motivo: str):
 	doc.cerrado_por_sistema = por_sistema
 	doc.save(ignore_permissions=True)
 	doc.add_comment("Comment", motivo)
+
+
+def _mover(nombre: str, f, motivo: str):
+	doc = frappe.get_doc("Vencimiento", nombre)
+	doc.fecha_tributaria = f.name
+	doc.fecha_vencimiento = f.fecha
+	doc.save(ignore_permissions=True)
+	doc.add_comment("Comment", motivo)
+
+
+def propagar_fecha(fecha_doc, anterior):
+	for nombre in frappe.get_all(
+		"Vencimiento", filters={"fecha_tributaria": fecha_doc.name, "estado": ("in", ABIERTOS)}, pluck="name"
+	):
+		_mover(nombre, fecha_doc, _("La fecha cambió del {0} al {1}.").format(anterior, fecha_doc.fecha))
+
+
+def al_guardar_cliente(doc, method=None):
+	generar(cliente=doc.name)
