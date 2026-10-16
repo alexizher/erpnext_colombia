@@ -300,4 +300,7 @@ doc_events = {
 
 scheduler_events = {
 	"daily": ["erpnext_colombia.vencimientos.tareas.diaria"],
+	"cron": {
+		"0 7 * * 1": ["erpnext_colombia.vencimientos.tareas.resumen_semanal"],
+	},
 }

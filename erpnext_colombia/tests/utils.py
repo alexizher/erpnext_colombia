@@ -223,3 +223,20 @@ def vencimientos_de(cliente, anio=2030, **filtros) -> list[dict]:
 		fields=["name", "periodo", "fecha_vencimiento", "estado", "cerrado_por_sistema"],
 		order_by="fecha_vencimiento",
 	)
+
+
+def cuenta_correo_prueba():
+	"""Cuenta saliente por defecto para que frappe.sendmail encole; en pruebas la cola no se envía."""
+	if frappe.db.exists("Email Account", {"default_outgoing": 1}):
+		return
+	frappe.get_doc(
+		{
+			"doctype": "Email Account",
+			"email_account_name": "Prueba Vencimientos",
+			"email_id": "pruebas@example.com",
+			"smtp_server": "localhost",
+			"enable_outgoing": 1,
+			"default_outgoing": 1,
+			"password": "x",
+		}
+	).insert(ignore_permissions=True)

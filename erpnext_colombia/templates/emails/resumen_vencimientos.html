@@ -1,0 +1,40 @@
+<p>{{ _("Resumen de vencimientos al {0}.").format(frappe.utils.formatdate(hoy)) }}</p>
+
+<h3>{{ _("Vencidos sin presentar") }}</h3>
+{% if vencidos %}
+<table border="1" cellpadding="4" cellspacing="0">
+	<tr><th>{{ _("Vencía") }}</th><th>{{ _("Cliente") }}</th><th>{{ _("Obligación") }}</th><th>{{ _("Periodo") }}</th><th>{{ _("Estado") }}</th></tr>
+	{% for v in vencidos %}
+	<tr style="color:#b00">
+		<td>{{ frappe.utils.formatdate(v.fecha_vencimiento) }}</td>
+		<td><a href="{{ frappe.utils.get_url_to_form('Vencimiento', v.name) }}">{{ v.cliente_nombre }}</a></td>
+		<td>{{ v.obligacion }}</td><td>{{ v.periodo }}</td><td>{{ v.estado }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% else %}<p>{{ _("Ninguno.") }}</p>{% endif %}
+
+<h3>{{ _("Próximos {0} días").format(dias) }}</h3>
+{% if proximos %}
+<table border="1" cellpadding="4" cellspacing="0">
+	<tr><th>{{ _("Vence") }}</th><th>{{ _("Cliente") }}</th><th>{{ _("Obligación") }}</th><th>{{ _("Periodo") }}</th><th>{{ _("Estado") }}</th></tr>
+	{% for v in proximos %}
+	<tr>
+		<td>{{ frappe.utils.formatdate(v.fecha_vencimiento) }}</td>
+		<td><a href="{{ frappe.utils.get_url_to_form('Vencimiento', v.name) }}">{{ v.cliente_nombre }}</a></td>
+		<td>{{ v.obligacion }}</td><td>{{ v.periodo }}</td><td>{{ v.estado }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% else %}<p>{{ _("Nada vence en estos días.") }}</p>{% endif %}
+
+<h3>{{ _("Datos por revisar") }}</h3>
+{% if problemas %}<ul>{% for p in problemas %}<li>{{ p }}</li>{% endfor %}</ul>
+{% else %}<p>{{ _("Ninguno.") }}</p>{% endif %}
+
+<h3>{{ _("Vigilancia de la DIAN") }}</h3>
+{% if vigilancia %}<ul>
+	{% for u in vigilancia %}
+	<li>{{ u.url }}: {% if u.ultimo_error %}{{ _("no se pudo revisar") }} ({{ u.ultimo_error }}){% else %}{{ _("revisada") }} {{ frappe.utils.format_datetime(u.ultima_revision) if u.ultima_revision else _("nunca") }}{% endif %}</li>
+	{% endfor %}
+</ul>{% else %}<p>{{ _("No hay páginas configuradas.") }}</p>{% endif %}
