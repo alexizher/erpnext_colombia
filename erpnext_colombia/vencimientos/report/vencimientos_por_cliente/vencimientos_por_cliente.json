@@ -1,0 +1,16 @@
+{
+ "add_total_row": 0,
+ "creation": "2026-10-15 00:00:00.000000",
+ "disabled": 0,
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "modified": "2026-10-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "Vencimientos por Cliente",
+ "owner": "Administrator",
+ "ref_doctype": "Vencimiento",
+ "report_name": "Vencimientos por Cliente",
+ "report_type": "Script Report",
+ "roles": [{"role": "System Manager"}, {"role": "Accounts Manager"}]
+}

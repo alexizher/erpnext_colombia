@@ -1,0 +1,31 @@
+{
+ "cards": [
+  {
+   "card": "Vencidos sin presentar"
+  },
+  {
+   "card": "Vencen esta semana"
+  },
+  {
+   "card": "Pr\u00f3ximos 15 d\u00edas"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "Vencimientos abiertos por obligaci\u00f3n",
+   "width": "Full"
+  }
+ ],
+ "creation": "2026-10-16 09:48:13.975022",
+ "dashboard_name": "Vencimientos",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "modified": "2026-10-16 09:48:13.975022",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "Vencimientos",
+ "owner": "Administrator"
+}

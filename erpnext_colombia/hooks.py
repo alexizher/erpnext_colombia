@@ -298,6 +298,10 @@ doc_events = {
 	"Account": {"after_insert": "erpnext_colombia.cuentas.al_crear_cuenta"},
 }
 
+override_doctype_dashboards = {
+	"Customer": "erpnext_colombia.vencimientos.tablero.cliente",
+}
+
 scheduler_events = {
 	"daily": ["erpnext_colombia.vencimientos.tareas.diaria"],
 	"cron": {
