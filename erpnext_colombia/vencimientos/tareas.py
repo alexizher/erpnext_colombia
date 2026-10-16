@@ -1,5 +1,6 @@
-from erpnext_colombia.vencimientos import generacion
+from erpnext_colombia.vencimientos import avisos, generacion
 
 
 def diaria():
 	generacion.generar()
+	avisos.abrir_todos()

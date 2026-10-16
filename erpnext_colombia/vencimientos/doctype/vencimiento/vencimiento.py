@@ -30,3 +30,8 @@ class Vencimiento(Document):
 			self.fecha_presentacion = today()
 		self.titulo = f"{self.cliente_nombre or self.cliente} · {self.obligacion} {self.periodo}"
 		self.color = COLORES[self.estado]
+
+	def on_update(self):
+		from erpnext_colombia.vencimientos.avisos import cerrar_si_termino
+
+		cerrar_si_termino(self)
