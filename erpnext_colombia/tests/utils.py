@@ -16,7 +16,13 @@ def preparar_sitio():
 	for nombre, compra, venta in (("Standard Selling", 0, 1), ("Standard Buying", 1, 0)):
 		if not frappe.db.exists("Price List", nombre):
 			frappe.get_doc(
-				{"doctype": "Price List", "price_list_name": nombre, "currency": "COP", "buying": compra, "selling": venta}
+				{
+					"doctype": "Price List",
+					"price_list_name": nombre,
+					"currency": "COP",
+					"buying": compra,
+					"selling": venta,
+				}
 			).insert()
 	frappe.db.set_single_value("Selling Settings", "selling_price_list", "Standard Selling")
 	frappe.db.set_single_value("Buying Settings", "buying_price_list", "Standard Buying")
@@ -39,7 +45,9 @@ def empresa_prueba() -> str:
 	if not frappe.db.get_value("Company", EMPRESA, "stock_received_but_not_billed"):
 		# El asistente no la llena con el PUC; ERPNext la pide en toda factura de compra.
 		srbnb = frappe.db.get_value(
-			"Account", {"company": EMPRESA, "account_number": ("like", "2335%"), "is_group": 0}, order_by="account_number"
+			"Account",
+			{"company": EMPRESA, "account_number": ("like", "2335%"), "is_group": 0},
+			order_by="account_number",
 		)
 		frappe.db.set_value("Company", EMPRESA, "stock_received_but_not_billed", srbnb)
 	if frappe.db.get_value("Company", EMPRESA, "enable_perpetual_inventory"):
@@ -71,7 +79,12 @@ def cuenta(numero: str, empresa: str = EMPRESA) -> str:
 def nuevo_tercero(numero: str, razon: str) -> str:
 	if not frappe.db.exists("Tercero", numero):
 		frappe.get_doc(
-			{"doctype": "Tercero", "tipo_documento": "31 - NIT", "numero_documento": numero, "razon_social": razon}
+			{
+				"doctype": "Tercero",
+				"tipo_documento": "31 - NIT",
+				"numero_documento": numero,
+				"razon_social": razon,
+			}
 		).insert()
 	return numero
 
@@ -95,7 +108,11 @@ def proveedor(numero: str, razon: str) -> str:
 	existente = frappe.db.get_value("Supplier", {"co_tercero": t})
 	if existente:
 		return existente
-	return frappe.get_doc({"doctype": "Supplier", "co_tercero": t, "supplier_group": GRUPO_PROVEEDOR}).insert().name
+	return (
+		frappe.get_doc({"doctype": "Supplier", "co_tercero": t, "supplier_group": GRUPO_PROVEEDOR})
+		.insert()
+		.name
+	)
 
 
 def asiento(empresa, fecha, lineas, tercero=None, enviar=True):
@@ -133,4 +150,76 @@ def gl(voucher_no: str) -> list[dict]:
 		filters={"voucher_no": voucher_no},
 		fields=["account", "debit", "credit", "tercero", "is_cancelled"],
 		order_by="creation",
+	)
+
+
+OBLIGACION_PRUEBA = "Prueba mensual"
+
+
+def obligacion_prueba() -> str:
+	"""Obligación solo para pruebas: así las fechas reales de 2026 no se cruzan con las de las pruebas."""
+	if not frappe.db.exists("Obligacion Tributaria", OBLIGACION_PRUEBA):
+		frappe.get_doc(
+			{"doctype": "Obligacion Tributaria", "nombre": OBLIGACION_PRUEBA, "formulario": "000"}
+		).insert()
+	return OBLIGACION_PRUEBA
+
+
+def fecha_prueba(periodo, fecha, anio=2030, segmento="Todos", cifras="1", desde=0, hasta=9, obligacion=None):
+	from erpnext_colombia.vencimientos.fechas import clave_fecha
+
+	datos = {
+		"doctype": "Fecha Tributaria",
+		"obligacion": obligacion or obligacion_prueba(),
+		"anio": anio,
+		"periodo": periodo,
+		"segmento": segmento,
+		"cifras": cifras,
+		"digito_desde": desde,
+		"digito_hasta": hasta,
+		"fecha": fecha,
+		"fuente": "prueba",
+	}
+	nombre = clave_fecha(datos)
+	if frappe.db.exists("Fecha Tributaria", nombre):
+		return frappe.get_doc("Fecha Tributaria", nombre)
+	return frappe.get_doc(datos).insert()
+
+
+def cliente_con(numero, razon, obligaciones, gran_contribuyente=0, tipo="31 - NIT"):
+	"""obligaciones: [{"obligacion": ..., "desde": ..., "hasta": ...}]"""
+	if not frappe.db.exists("Tercero", numero):
+		datos = {"doctype": "Tercero", "tipo_documento": tipo, "numero_documento": numero}
+		if tipo.startswith("31"):
+			datos["razon_social"] = razon
+		else:
+			datos.update({"primer_apellido": razon, "primer_nombre": "Prueba"})
+		frappe.get_doc(datos).insert()
+	nombre = frappe.db.get_value("Customer", {"co_tercero": numero})
+	if nombre:
+		c = frappe.get_doc("Customer", nombre)
+	else:
+		c = frappe.get_doc(
+			{
+				"doctype": "Customer",
+				"co_tercero": numero,
+				"customer_group": GRUPO_CLIENTE,
+				"territory": TERRITORIO,
+			}
+		)
+	c.co_gran_contribuyente = gran_contribuyente
+	c.set("co_obligaciones", obligaciones)
+	if nombre:
+		c.save()
+	else:
+		c.insert()
+	return c.name
+
+
+def vencimientos_de(cliente, anio=2030, **filtros) -> list[dict]:
+	return frappe.get_all(
+		"Vencimiento",
+		filters={"cliente": cliente, "anio": anio, **filtros},
+		fields=["name", "periodo", "fecha_vencimiento", "estado", "cerrado_por_sistema"],
+		order_by="fecha_vencimiento",
 	)

@@ -1,0 +1,25 @@
+{
+ "actions": [],
+ "creation": "2026-10-15 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["responsable", "dias_anticipacion", "correos_alerta_dian", "section_break_1", "urls_vigiladas"],
+ "fields": [
+  {"fieldname": "responsable", "fieldtype": "Link", "options": "User", "label": "Responsable", "description": "Recibe los ToDo y el resumen de los lunes."},
+  {"default": "15", "fieldname": "dias_anticipacion", "fieldtype": "Int", "label": "Días de anticipación", "non_negative": 1},
+  {"fieldname": "correos_alerta_dian", "fieldtype": "Small Text", "label": "Correos para la alerta de la DIAN", "description": "Uno por línea."},
+  {"fieldname": "section_break_1", "fieldtype": "Section Break", "label": "Páginas de la DIAN que se vigilan"},
+  {"fieldname": "urls_vigiladas", "fieldtype": "Table", "options": "URL Vigilada DIAN", "label": "Páginas"}
+ ],
+ "issingle": 1,
+ "modified": "2026-10-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "Configuracion de Vencimientos",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "read": 1, "role": "System Manager", "write": 1}
+ ],
+ "states": [],
+ "track_changes": 1
+}

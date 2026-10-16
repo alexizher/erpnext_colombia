@@ -1,0 +1,23 @@
+{
+ "actions": [],
+ "creation": "2026-10-15 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["url", "ultima_revision", "ultimo_error", "ultima_huella", "ultimos_enlaces"],
+ "fields": [
+  {"fieldname": "url", "fieldtype": "Data", "options": "URL", "label": "URL", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "ultima_revision", "fieldtype": "Datetime", "label": "Última revisión", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "ultimo_error", "fieldtype": "Small Text", "label": "Último error", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "ultima_huella", "fieldtype": "Data", "label": "Huella", "read_only": 1},
+  {"fieldname": "ultimos_enlaces", "fieldtype": "Long Text", "label": "Enlaces vistos", "read_only": 1, "hidden": 1}
+ ],
+ "istable": 1,
+ "modified": "2026-10-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Vencimientos",
+ "name": "URL Vigilada DIAN",
+ "owner": "Administrator",
+ "permissions": [],
+ "states": []
+}
