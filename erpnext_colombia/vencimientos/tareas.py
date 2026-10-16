@@ -1,4 +1,4 @@
-from erpnext_colombia.vencimientos import avisos, generacion, resumen
+from erpnext_colombia.vencimientos import avisos, generacion, resumen, vigilancia
 
 
 def diaria():
@@ -8,3 +8,7 @@ def diaria():
 
 def resumen_semanal():
 	resumen.enviar()
+
+
+def vigilancia_semanal():
+	vigilancia.revisar()

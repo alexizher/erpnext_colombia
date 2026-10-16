@@ -301,6 +301,7 @@ doc_events = {
 scheduler_events = {
 	"daily": ["erpnext_colombia.vencimientos.tareas.diaria"],
 	"cron": {
+		"0 6 * * 1": ["erpnext_colombia.vencimientos.tareas.vigilancia_semanal"],
 		"0 7 * * 1": ["erpnext_colombia.vencimientos.tareas.resumen_semanal"],
 	},
 }

@@ -1,0 +1,6 @@
+<p>{{ asunto }}: <a href="{{ url }}">{{ url }}</a></p>
+{% if error %}<p>{{ _("Error") }}: {{ error }}</p>
+<p>{{ _("Mientras no se pueda revisar, los cambios de fechas de la DIAN no se detectan. Revise la página a mano.") }}</p>{% endif %}
+{% if nuevos %}<p>{{ _("Documentos nuevos") }}:</p><ul>{% for e in nuevos %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+{% if quitados %}<p>{{ _("Documentos que ya no aparecen") }}:</p><ul>{% for e in quitados %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+{% if not error %}<p>{{ _("Revise si cambió alguna fecha y corrija la Fecha Tributaria que corresponda.") }}</p>{% endif %}
