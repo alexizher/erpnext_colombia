@@ -11,6 +11,10 @@ Las reglas contables (tercero obligatorio en las cuentas 13 y 22 a 25, clasifica
 
 Al crear una empresa colombiana con la plantilla "Colombia PUC", la app corrige las cuentas por defecto que ERPNext deja mal (por cobrar 130505, por pagar 2205, recibido no facturado 233595, redondeo 429581, entre otras) y apaga el inventario perpetuo. Solo pasa al crearla: los cambios que se hagan después en la empresa se respetan.
 
+### Traducción
+
+`erpnext_colombia/translations/es.csv` completa en español lo que Frappe y ERPNext v16 todavía no traducen: la pantalla de entrada, el saludo y los pasos de bienvenida del inicio, y los mensajes de las gráficas sin datos. Se aplica sobre la traducción oficial porque la app se instala después de ERPNext. Las pruebas de `test_traducciones.py` fallan si una versión nueva de ERPNext trae pasos de bienvenida o gráficas sin traducir.
+
 ### Vencimientos
 
 El módulo Vencimientos lleva el calendario DIAN de cada cliente. En la ficha del cliente (sección "Obligaciones tributarias") se marcan sus obligaciones: renta, IVA bimestral o cuatrimestral, retención en la fuente, exógena y Régimen Simple. Con el NIT del tercero, la app crea un vencimiento por obligación y periodo, con su estado y el radicado.
