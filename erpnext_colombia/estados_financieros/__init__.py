@@ -3,20 +3,22 @@ import frappe
 MODULO = "ERPNext Colombia"
 
 
-def _todas():
+def plantillas():
+	"""Definiciones de las plantillas NIIF de la app: grupo 2 y luego grupo 3, cada uno en el orden
+	de sus estados (situación financiera primero)."""
 	from erpnext_colombia.estados_financieros import grupo3
 
-	plantillas = list(grupo3.PLANTILLAS)
+	definiciones = list(grupo3.PLANTILLAS)
 	try:
 		from erpnext_colombia.estados_financieros import grupo2
 	except ImportError:
-		return plantillas
-	return plantillas + list(grupo2.PLANTILLAS)
+		return definiciones
+	return list(grupo2.PLANTILLAS) + definiciones
 
 
 def sincronizar_plantillas():
 	"""Crea o reemplaza las plantillas de la app. Las filas se reescriben enteras en cada migración."""
-	for definicion in _todas():
+	for definicion in plantillas():
 		nombre = definicion["name"]
 		if frappe.db.exists("Financial Report Template", nombre):
 			doc = frappe.get_doc("Financial Report Template", nombre)
