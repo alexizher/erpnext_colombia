@@ -66,6 +66,13 @@ class TestCatalogo(IntegrationTestCase):
 		fechas.sincronizar_fechas(carpeta_con([fila("Julio de 2031", "2031-08-12")]))
 		self.assertEqual(frappe.db.get_value("Fecha Tributaria", nombre, "digito_hasta"), 9)
 
+	def test_sincronizar_sin_cambios_no_guarda(self):
+		fechas.sincronizar_fechas(carpeta_con([fila("Agosto de 2031", "2031-09-10")]))
+		nombre = fechas.clave_fecha(fila("Agosto de 2031", "2031-09-10"))
+		antes = frappe.db.get_value("Fecha Tributaria", nombre, "modified")
+		fechas.sincronizar_fechas(carpeta_con([fila("Agosto de 2031", "2031-09-10")]))
+		self.assertEqual(frappe.db.get_value("Fecha Tributaria", nombre, "modified"), antes)
+
 	def test_nombres_de_doctype_traducidos(self):
 		frappe.local.lang = "es"
 		frappe.local.lang_full_dict = None

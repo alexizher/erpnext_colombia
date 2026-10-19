@@ -20,6 +20,20 @@ class TestVistas(IntegrationTestCase):
 		self.assertIn("radicado", [col["fieldname"] for col in columnas])
 		self.assertEqual([f["periodo"] for f in filas], ["Diciembre de 2030"])
 
+	def test_reporte_muestra_el_nit_con_dv(self):
+		from erpnext_colombia.vencimientos.report.vencimientos_por_cliente.vencimientos_por_cliente import (
+			execute,
+		)
+
+		fecha_prueba("Diciembre de 2030", "2031-01-10", anio=2031, desde=0, hasta=9)
+		c = cliente_con(
+			"900600702", "Vis Dos S.A.S.", [{"obligacion": obligacion_prueba(), "desde": "2030-01-01"}]
+		)
+		generar(cliente=c, anio=2031)
+		_, filas = execute(frappe._dict({"anio": 2031, "cliente": c}))
+		self.assertEqual(filas[0]["nit"], frappe.db.get_value("Tercero", "900600702", "nit_completo"))
+		self.assertIn("-", filas[0]["nit"])
+
 	def test_cliente_muestra_sus_vencimientos(self):
 		datos = frappe.get_meta("Customer").get_dashboard_data()
 		self.assertEqual(datos.non_standard_fieldnames.get("Vencimiento"), "cliente")

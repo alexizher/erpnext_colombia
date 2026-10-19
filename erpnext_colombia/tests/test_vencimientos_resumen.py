@@ -50,11 +50,26 @@ class TestResumen(IntegrationTestCase):
 		resumen.enviar(hoy="2035-01-07")
 		self.assertEqual(frappe.db.count("Email Queue"), 1)
 
-	def test_resumen_sin_responsable_va_al_admin(self):
-		frappe.db.set_single_value("Configuracion de Vencimientos", "responsable", None)
+	def test_resumen_sin_responsable_va_a_los_correos_de_alerta(self):
+		frappe.db.set_single_value(
+			"Configuracion de Vencimientos",
+			{"responsable": None, "correos_alerta_dian": "alerta1@repolite.link\nalerta2@repolite.link"},
+		)
+		self.assertEqual(resumen.destinatarios(), ["alerta1@repolite.link", "alerta2@repolite.link"])
+
+	def test_resumen_sin_a_quien_no_sale_a_un_correo_de_ejemplo(self):
+		frappe.db.set_single_value(
+			"Configuracion de Vencimientos", {"responsable": None, "correos_alerta_dian": None}
+		)
 		frappe.db.delete("Email Queue")
-		destino = resumen.enviar(hoy="2030-11-01")
-		self.assertEqual(destino, "admin@example.com")
+		self.assertEqual(resumen.enviar(hoy="2030-11-01"), [])
+		self.assertEqual(frappe.db.count("Email Queue"), 0)
 		self.assertTrue(
 			frappe.db.exists("Error Log", {"method": ("like", "%Vencimientos: sin responsable%")})
 		)
+
+	def test_cero_dias_de_anticipacion_se_respeta(self):
+		from erpnext_colombia.vencimientos.reglas import dias_anticipacion
+
+		frappe.db.set_single_value("Configuracion de Vencimientos", "dias_anticipacion", 0)
+		self.assertEqual(dias_anticipacion(), 0)

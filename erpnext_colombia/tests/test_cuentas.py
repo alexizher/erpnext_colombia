@@ -4,7 +4,12 @@ from erpnext.accounts.doctype.accounting_dimension_filter.accounting_dimension_f
 )
 from frappe.tests import IntegrationTestCase
 
-from erpnext_colombia.cuentas import aplicar_a_empresa, clasificacion_por_defecto, empresas_con_puc, exige_tercero
+from erpnext_colombia.cuentas import (
+	aplicar_a_empresa,
+	clasificacion_por_defecto,
+	empresas_con_puc,
+	exige_tercero,
+)
 from erpnext_colombia.tests.utils import asiento, cuenta, empresa_extranjera, empresa_prueba, nuevo_tercero
 
 
@@ -124,3 +129,45 @@ class TestCuentas(IntegrationTestCase):
 		aplicar_a_empresa(nombre)
 		self.assertFalse(frappe.db.exists("Accounting Dimension Filter", {"company": nombre}))
 		self.assertFalse(frappe.db.get_value("Account", cuenta("110505", nombre), "co_clasificacion_niif"))
+
+
+class TestCuentasPorDefecto(IntegrationTestCase):
+	EMPRESA = "Empresa Nueva CO"
+
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		if not frappe.db.exists("Company", cls.EMPRESA):
+			frappe.get_doc(
+				{
+					"doctype": "Company",
+					"company_name": cls.EMPRESA,
+					"abbr": "ENC",
+					"default_currency": "COP",
+					"country": "Colombia",
+					"chart_of_accounts": "Colombia PUC",
+					"create_chart_of_accounts_based_on": "Standard Template",
+				}
+			).insert()
+
+	def _numero(self, campo, empresa=None):
+		cuenta_ = frappe.db.get_value("Company", empresa or self.EMPRESA, campo)
+		return frappe.db.get_value("Account", cuenta_, "account_number")
+
+	def test_empresa_nueva_con_puc_queda_con_las_cuentas_del_puc(self):
+		self.assertEqual(self._numero("default_receivable_account"), "130505")
+		self.assertEqual(self._numero("default_payable_account"), "2205")
+		self.assertEqual(self._numero("stock_received_but_not_billed"), "233595")
+		self.assertEqual(self._numero("round_off_account"), "429581")
+
+	def test_empresa_nueva_con_puc_sin_inventario_perpetuo(self):
+		self.assertFalse(frappe.db.get_value("Company", self.EMPRESA, "enable_perpetual_inventory"))
+
+	def test_guardar_despues_no_pisa_un_cambio_a_mano(self):
+		empresa = frappe.get_doc("Company", self.EMPRESA)
+		empresa.default_receivable_account = cuenta("130510", self.EMPRESA)
+		empresa.save()
+		self.assertEqual(self._numero("default_receivable_account"), "130510")
+
+	def test_empresa_de_otro_pais_no_se_toca(self):
+		self.assertNotEqual(self._numero("default_receivable_account", empresa_extranjera()), "130505")

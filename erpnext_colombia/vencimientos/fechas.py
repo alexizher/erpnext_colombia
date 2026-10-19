@@ -31,10 +31,15 @@ def _sincronizar_fila(fila: dict):
 	nombre = clave_fecha(fila)
 	if frappe.db.exists("Fecha Tributaria", nombre):
 		doc = frappe.get_doc("Fecha Tributaria", nombre)
-		if doc.corregida_a_mano:
+		if doc.corregida_a_mano or not _cambio(doc, fila):
 			return
 		doc.update({c: fila[c] for c in CAMPOS})
 	else:
 		doc = frappe.get_doc({"doctype": "Fecha Tributaria", **{c: fila[c] for c in CAMPOS}})
 	doc.flags.desde_sincronizacion = True
 	doc.save(ignore_permissions=True)
+
+
+def _cambio(doc, fila: dict) -> bool:
+	# Fechas y enteros llegan del JSON como texto; str() iguala date y "AAAA-MM-DD".
+	return any(str(doc.get(c)) != str(fila[c]) for c in CAMPOS)

@@ -86,6 +86,17 @@ class TestVigilancia(IntegrationTestCase):
 			vigilancia.revisar()
 		self.assertEqual(len(self._correos()), 1)
 
+	def test_pdf_servido_como_octet_stream_se_compara_por_contenido(self):
+		with patch(
+			"requests.get", return_value=respuesta(b"%PDF-1.7 version 1", tipo="application/octet-stream")
+		):
+			uno, _ = vigilancia._leer("https://www.dian.gov.co/x.pdf")
+		with patch(
+			"requests.get", return_value=respuesta(b"%PDF-1.7 version 2", tipo="application/octet-stream")
+		):
+			dos, _ = vigilancia._leer("https://www.dian.gov.co/x.pdf")
+		self.assertNotEqual(uno, dos)
+
 	def test_403_avisa_y_queda_en_la_fila(self):
 		with patch("requests.get", return_value=respuesta("", status=403)):
 			vigilancia.revisar()
