@@ -5,7 +5,7 @@ from erpnext.accounts.doctype.accounting_dimension_filter.accounting_dimension_f
 from frappe.tests import IntegrationTestCase
 
 from erpnext_colombia.cuentas import aplicar_a_empresa, clasificacion_por_defecto, empresas_con_puc, exige_tercero
-from erpnext_colombia.tests.utils import asiento, cuenta, empresa_prueba, nuevo_tercero
+from erpnext_colombia.tests.utils import asiento, cuenta, empresa_extranjera, empresa_prueba, nuevo_tercero
 
 
 class TestCuentas(IntegrationTestCase):
@@ -117,3 +117,10 @@ class TestCuentas(IntegrationTestCase):
 			self.assertIn(self.empresa, empresas_con_puc())
 		finally:
 			frappe.db.set_value("Company", self.empresa, "chart_of_accounts", "Colombia PUC")
+
+	def test_empresa_con_puc_de_otro_pais_se_salta(self):
+		nombre = empresa_extranjera()
+		self.assertNotIn(nombre, empresas_con_puc())
+		aplicar_a_empresa(nombre)
+		self.assertFalse(frappe.db.exists("Accounting Dimension Filter", {"company": nombre}))
+		self.assertFalse(frappe.db.get_value("Account", cuenta("110505", nombre), "co_clasificacion_niif"))

@@ -1,7 +1,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext_colombia.tests.utils import asiento, cliente, cuenta, empresa_prueba, gl, nuevo_tercero, proveedor
+from erpnext_colombia.tests.utils import asiento, cliente, cuenta, empresa_extranjera, empresa_prueba, gl, nuevo_tercero, proveedor
 
 
 class TestMovimientos(IntegrationTestCase):
@@ -160,3 +160,18 @@ class TestMovimientos(IntegrationTestCase):
 		je.accounts[1].party = s2
 		je.save()
 		self.assertEqual(je.accounts[1].tercero, "890903938")
+
+	def test_empresa_de_otro_pais_no_recibe_tercero(self):
+		from erpnext_colombia.movimientos import completar_tercero
+
+		empresa = empresa_extranjera()
+		c = cliente("890903938", "Bancolombia S.A.")
+		je = frappe.get_doc(
+			{
+				"doctype": "Journal Entry",
+				"company": empresa,
+				"accounts": [{"account": cuenta("130505", empresa), "party_type": "Customer", "party": c}],
+			}
+		)
+		completar_tercero(je)
+		self.assertFalse(je.accounts[0].tercero)

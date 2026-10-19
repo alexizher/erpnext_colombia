@@ -1,3 +1,4 @@
+from erpnext_colombia.pais import es_colombiana
 from erpnext_colombia.partes import tercero_de
 
 PARTE_DEL_ENCABEZADO = {
@@ -13,6 +14,8 @@ def completar_tercero(doc, method=None):
 	Se reemplaza en cada validación, no solo cuando está vacío: si Daniela cambia el cliente de un
 	borrador, o duplica un documento y cambia la parte, el tercero viejo no debe quedarse.
 	"""
+	if not es_colombiana(doc.company):
+		return
 	if doc.doctype == "Journal Entry":
 		for fila in doc.get("accounts"):
 			if fila.party_type in PARTES_CON_TERCERO and (t := tercero_de(fila.party_type, fila.party)):

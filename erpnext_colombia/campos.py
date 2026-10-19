@@ -1,3 +1,13 @@
+from erpnext_colombia.pais import PAIS
+
+SOLO_COLOMBIA = f"eval:doc.country=='{PAIS}'"
+
+
+def _de_colombia(campos):
+	"""La empresa extranjera no ve el tercero ni la certificación de la Ley 222."""
+	return [{**campo, "depends_on": SOLO_COLOMBIA} for campo in campos]
+
+
 def _tercero(insert_after):
 	return {
 		"fieldname": "co_tercero",
@@ -43,58 +53,60 @@ CAMPOS = {
 		},
 	],
 	"Supplier": [_tercero("supplier_name")],
-	"Company": [
-		{**_tercero("tax_id"), "reqd": 0},
-		{
-			"fieldname": "co_seccion_certificacion",
-			"label": "Certificación de estados financieros",
-			"fieldtype": "Section Break",
-			"insert_after": "co_tercero",
-			"collapsible": 1,
-		},
-		{
-			"fieldname": "co_representante_legal",
-			"label": "Representante legal",
-			"fieldtype": "Data",
-			"insert_after": "co_seccion_certificacion",
-		},
-		{
-			"fieldname": "co_representante_legal_documento",
-			"label": "Documento del representante legal",
-			"fieldtype": "Data",
-			"insert_after": "co_representante_legal",
-		},
-		{
-			"fieldname": "co_contador",
-			"label": "Contador",
-			"fieldtype": "Data",
-			"insert_after": "co_representante_legal_documento",
-		},
-		{
-			"fieldname": "co_contador_tarjeta_profesional",
-			"label": "Tarjeta profesional del contador",
-			"fieldtype": "Data",
-			"insert_after": "co_contador",
-		},
-		{
-			"fieldname": "co_columna_revisor",
-			"fieldtype": "Column Break",
-			"insert_after": "co_contador_tarjeta_profesional",
-		},
-		{
-			"fieldname": "co_revisor_fiscal",
-			"label": "Revisor fiscal",
-			"fieldtype": "Data",
-			"insert_after": "co_columna_revisor",
-			"description": "Solo si la empresa está obligada a tenerlo.",
-		},
-		{
-			"fieldname": "co_revisor_fiscal_tarjeta_profesional",
-			"label": "Tarjeta profesional del revisor fiscal",
-			"fieldtype": "Data",
-			"insert_after": "co_revisor_fiscal",
-		},
-	],
+	"Company": _de_colombia(
+		[
+			{**_tercero("tax_id"), "reqd": 0},
+			{
+				"fieldname": "co_seccion_certificacion",
+				"label": "Certificación de estados financieros",
+				"fieldtype": "Section Break",
+				"insert_after": "co_tercero",
+				"collapsible": 1,
+			},
+			{
+				"fieldname": "co_representante_legal",
+				"label": "Representante legal",
+				"fieldtype": "Data",
+				"insert_after": "co_seccion_certificacion",
+			},
+			{
+				"fieldname": "co_representante_legal_documento",
+				"label": "Documento del representante legal",
+				"fieldtype": "Data",
+				"insert_after": "co_representante_legal",
+			},
+			{
+				"fieldname": "co_contador",
+				"label": "Contador",
+				"fieldtype": "Data",
+				"insert_after": "co_representante_legal_documento",
+			},
+			{
+				"fieldname": "co_contador_tarjeta_profesional",
+				"label": "Tarjeta profesional del contador",
+				"fieldtype": "Data",
+				"insert_after": "co_contador",
+			},
+			{
+				"fieldname": "co_columna_revisor",
+				"fieldtype": "Column Break",
+				"insert_after": "co_contador_tarjeta_profesional",
+			},
+			{
+				"fieldname": "co_revisor_fiscal",
+				"label": "Revisor fiscal",
+				"fieldtype": "Data",
+				"insert_after": "co_columna_revisor",
+				"description": "Solo si la empresa está obligada a tenerlo.",
+			},
+			{
+				"fieldname": "co_revisor_fiscal_tarjeta_profesional",
+				"label": "Tarjeta profesional del revisor fiscal",
+				"fieldtype": "Data",
+				"insert_after": "co_revisor_fiscal",
+			},
+		]
+	),
 	"Account": [
 		{
 			"fieldname": "co_clasificacion_niif",
