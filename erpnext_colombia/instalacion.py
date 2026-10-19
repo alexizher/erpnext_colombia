@@ -32,6 +32,9 @@ def configurar():
 	from erpnext_colombia.vencimientos import instalacion as vencimientos
 
 	vencimientos.configurar()
+	from erpnext_colombia.navegacion import agregar_a_contabilidad
+
+	agregar_a_contabilidad()
 	frappe.clear_cache()
 
 

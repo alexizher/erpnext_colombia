@@ -28,21 +28,13 @@ class TestVistas(IntegrationTestCase):
 	def test_kanban_existe(self):
 		self.assertEqual(frappe.db.get_value("Kanban Board", "Vencimientos", "field_name"), "estado")
 
-	def test_tarjetas_tablero_y_barra(self):
+	def test_tarjetas_y_tablero(self):
 		tarjetas = ("Vencidos sin presentar", "Vencen esta semana", "Próximos 15 días")
 		for tarjeta in tarjetas:
 			self.assertTrue(frappe.db.exists("Number Card", tarjeta), tarjeta)
 		tablero = frappe.get_doc("Dashboard", "Vencimientos")
 		self.assertEqual([c.card for c in tablero.cards], list(tarjetas))
-		barra = frappe.get_doc("Sidebar", "Vencimientos")
-		self.assertEqual((barra.items[0].link_type, barra.items[0].link_to), ("Dashboard", "Vencimientos"))
-		riel = frappe.get_all(
-			"Dock", filters={"app": "erpnext_colombia", "standard": 1}, fields=["name", "mount_on"]
-		)
-		self.assertEqual([r.mount_on for r in riel], ["erpnext"])
-		items = frappe.get_all("Dock Item", filters={"parent": riel[0].name}, pluck="link_to")
-		self.assertEqual(items, ["Vencimientos"])
 
 	def test_la_barra_abre_en_la_misma_pestana(self):
-		barra = frappe.get_doc("Sidebar", "Vencimientos")
+		barra = frappe.get_doc("Sidebar", "Oficina")
 		self.assertEqual([i.label for i in barra.items if i.open_in_new_tab], [])

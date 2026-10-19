@@ -2,6 +2,13 @@
 
 Localización colombiana para ERPNext: PUC, terceros, impuestos, DIAN y exógena
 
+### Dónde está cada cosa
+
+- **Oficina**, en la barra de íconos de ERPNext: el tablero de vencimientos, los vencimientos, los clientes, el reporte por cliente y, en Configuración, las fechas tributarias y las obligaciones.
+- **Contabilidad → Terceros y NIIF**, al final del menú: los terceros y los estados financieros de los grupos 2 y 3, cada uno abierto con su plantilla.
+
+Las reglas contables (tercero obligatorio en las cuentas 13 y 22 a 25, clasificación NIIF, tercero en facturas, pagos y asientos) aplican solo a las empresas con país Colombia que usan el PUC. Los campos de tercero y certificación de la Ley 222 solo aparecen en la ficha de una empresa colombiana.
+
 ### Vencimientos
 
 El módulo Vencimientos lleva el calendario DIAN de cada cliente. En la ficha del cliente (sección "Obligaciones tributarias") se marcan sus obligaciones: renta, IVA bimestral o cuatrimestral, retención en la fuente, exógena y Régimen Simple. Con el NIT del tercero, la app crea un vencimiento por obligación y periodo, con su estado y el radicado.

@@ -70,6 +70,26 @@ def empresa_prueba() -> str:
 	return EMPRESA
 
 
+EMPRESA_EXTRANJERA = "Empresa Prueba EC"
+
+
+def empresa_extranjera() -> str:
+	"""Empresa con el PUC colombiano pero de otro país: las reglas de la app no le aplican."""
+	if not frappe.db.exists("Company", EMPRESA_EXTRANJERA):
+		frappe.get_doc(
+			{
+				"doctype": "Company",
+				"company_name": EMPRESA_EXTRANJERA,
+				"abbr": "EPE",
+				"default_currency": "USD",
+				"country": "Ecuador",
+				"chart_of_accounts": "Colombia PUC",
+				"create_chart_of_accounts_based_on": "Standard Template",
+			}
+		).insert()
+	return EMPRESA_EXTRANJERA
+
+
 def cuenta(numero: str, empresa: str = EMPRESA) -> str:
 	nombre = frappe.db.get_value("Account", {"company": empresa, "account_number": numero})
 	assert nombre, f"No existe la cuenta {numero} en {empresa}"

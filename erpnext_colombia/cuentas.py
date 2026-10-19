@@ -1,5 +1,7 @@
 import frappe
 
+from erpnext_colombia.pais import PAIS
+
 PLANTILLAS_PUC = ("Colombia PUC", "Colombia PUC Simple")
 DIMENSION = "Tercero"
 PREFIJOS_CORRIENTES = ("11", "12", "13", "14", "21", "22", "23", "24", "25", "26", "28")
@@ -22,16 +24,28 @@ def exige_tercero(numero) -> bool:
 
 
 def empresas_con_puc() -> list[str]:
-	"""Empresas con el PUC colombiano: por la plantilla elegida o, si se crearon a partir de otra
+	"""Empresas colombianas con el PUC: por la plantilla elegida o, si se crearon a partir de otra
 	empresa (chart_of_accounts vacío), porque tienen la cuenta 1105 (Caja) numerada."""
-	por_plantilla = frappe.get_all("Company", filters={"chart_of_accounts": ("in", PLANTILLAS_PUC)}, pluck="name")
-	por_cuenta = frappe.get_all("Account", filters={"account_number": "1105"}, pluck="company", distinct=True)
+	colombianas = frappe.get_all("Company", filters={"country": PAIS}, pluck="name")
+	if not colombianas:
+		return []
+	por_plantilla = frappe.get_all(
+		"Company",
+		filters={"name": ("in", colombianas), "chart_of_accounts": ("in", PLANTILLAS_PUC)},
+		pluck="name",
+	)
+	por_cuenta = frappe.get_all(
+		"Account",
+		filters={"company": ("in", colombianas), "account_number": "1105"},
+		pluck="company",
+		distinct=True,
+	)
 	return sorted(set(por_plantilla) | set(por_cuenta))
 
 
 def aplicar_a_empresa(empresa: str) -> None:
 	if empresa not in empresas_con_puc():
-		frappe.logger("erpnext_colombia").info(f"{empresa} no usa el PUC colombiano; se salta")
+		frappe.logger("erpnext_colombia").info(f"{empresa} no es colombiana o no usa el PUC; se salta")
 		return
 	cuentas = frappe.get_all(
 		"Account",

@@ -1,9 +1,9 @@
 {
  "app": "erpnext_colombia",
- "creation": "2026-10-16 09:48:14.006619",
+ "creation": "2026-10-19 12:00:00.000000",
  "docstatus": 0,
  "doctype": "Sidebar",
- "header_icon": "calendar",
+ "header_icon": "briefcase",
  "idx": 0,
  "items": [
   {
@@ -79,7 +79,7 @@
    "indent": 1,
    "is_default_module": 0,
    "keep_closed": 1,
-   "label": "Configuraci\u00f3n",
+   "label": "Configuración",
    "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,
@@ -126,7 +126,7 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Configuraci\u00f3n de vencimientos",
+   "label": "Configuración de vencimientos",
    "link_to": "Configuracion de Vencimientos",
    "link_type": "DocType",
    "open_in_new_tab": 0,
@@ -134,11 +134,11 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-16 10:13:55.456319",
+ "modified": "2026-10-19 12:00:00.000000",
  "modified_by": "Administrator",
- "module": "Vencimientos",
- "name": "Vencimientos",
+ "module": "Oficina",
+ "name": "Oficina",
  "owner": "Administrator",
  "standard": 1,
- "title": "Vencimientos"
+ "title": "Oficina"
 }
