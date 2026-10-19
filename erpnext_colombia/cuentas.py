@@ -8,6 +8,17 @@ PREFIJOS_CORRIENTES = ("11", "12", "13", "14", "21", "22", "23", "24", "25", "26
 PREFIJOS_NO_CORRIENTES = ("15", "16", "17", "18", "19", "27")
 PREFIJOS_CON_TERCERO = ("13", "22", "23", "24", "25")
 RAICES_DE_BALANCE = ("Asset", "Liability")
+# Lo que ERPNext deja mal al crear una empresa con la plantilla "Colombia PUC" (por cobrar en 139980, etc.).
+CUENTAS_POR_DEFECTO = {
+	"default_receivable_account": "130505",
+	"default_payable_account": "2205",
+	"default_expense_account": "519595",
+	"default_cash_account": "110505",
+	"default_bank_account": "111005",
+	"round_off_account": "429581",
+	"exchange_gain_loss_account": "421020",
+	"stock_received_but_not_billed": "233595",
+}
 
 
 def clasificacion_por_defecto(numero, root_type):
@@ -89,3 +100,27 @@ def al_crear_cuenta(doc, method=None):
 			doc.db_set("co_clasificacion_niif", valor, update_modified=False)
 	if not doc.is_group and exige_tercero(doc.account_number):
 		_asegurar_filtro(doc.company, [doc.name])
+
+
+def al_crear_empresa(doc, method=None):
+	# after_insert corre antes de que ERPNext cree el plan de cuentas (en on_update): aquí solo se marca.
+	doc.flags.co_empresa_nueva = True
+
+
+def al_guardar_empresa(doc, method=None):
+	if doc.flags.co_empresa_nueva and doc.name in empresas_con_puc():
+		corregir_cuentas_por_defecto(doc.name)
+
+
+def corregir_cuentas_por_defecto(empresa: str) -> None:
+	"""Solo al crear la empresa: después las cuentas por defecto son decisión de quien la lleva."""
+	valores = {}
+	for campo, numero in CUENTAS_POR_DEFECTO.items():
+		nombre = frappe.db.get_value("Account", {"company": empresa, "account_number": numero, "is_group": 0})
+		if nombre:
+			valores[campo] = nombre
+	valores["round_off_cost_center"] = frappe.db.get_value("Company", empresa, "cost_center")
+	# Contabilidad externa: el inventario se registra con asientos, no con movimientos de stock.
+	valores["enable_perpetual_inventory"] = 0
+	frappe.db.set_value("Company", empresa, valores)
+	frappe.clear_document_cache("Company", empresa)
