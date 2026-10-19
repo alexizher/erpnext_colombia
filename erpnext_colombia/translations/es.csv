@@ -2,3 +2,259 @@ Obligacion Tributaria,Obligación tributaria
 Obligacion del Cliente,Obligación del cliente
 Configuracion de Vencimientos,Configuración de vencimientos
 URL Vigilada DIAN,URL vigilada DIAN
+A business or person you buy from. See [Supplier](https://docs.frappe.io/erpnext/user/manual/en/supplier).,Una empresa o persona a la que le compra. Ver [Proveedor](https://docs.frappe.io/erpnext/user/manual/en/supplier).
+A business or person you sell to. See [Customer](https://docs.frappe.io/erpnext/user/manual/en/customer).,Una empresa o persona a la que le vende. Ver [Cliente](https://docs.frappe.io/erpnext/user/manual/en/customer).
+A product or a service you sell. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).,Un producto o servicio que vende. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item).
+Add Asset,Agregar activo
+Add Bank Account,Agregar cuenta bancaria
+Add Customer,Agregar cliente
+Add Supplier,Agregar proveedor
+Add User,Agregar usuario
+Add a customer,Agregue un cliente
+Add a product you make,Agregue un producto que fabrica
+Add a raw material,Agregue una materia prima
+Add a supplier,Agregue un proveedor
+"Add a supplier, order from them and pay their bill.","Agregue un proveedor, hágale un pedido y pague su factura."
+Add an asset item,Agregue un producto de activo
+"Add an item and a customer, bill them and collect the payment.","Agregue un producto y un cliente, facture y cobre el pago."
+Add an item you buy,Agregue un producto que compra
+Add an item you sell,Agregue un producto que vende
+Add an item you stock,Agregue un producto que tiene en inventario
+Add the bank account you use,Agregue la cuenta bancaria que usa
+Add the people you work with and choose what they can see.,Agregue a las personas con las que trabaja y elija qué pueden ver.
+"Anything with a start and an end: a client job, an installation, an internal initiative. See [Project](https://docs.frappe.io/erpnext/user/manual/en/project).","Todo lo que tiene un inicio y un fin: un trabajo para un cliente, una instalación, una iniciativa interna. Ver [Proyecto](https://docs.frappe.io/erpnext/user/manual/en/project)."
+Anything you keep on shelves and count. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).,Todo lo que guarda en estantes y cuenta. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item).
+"Assets, liabilities and equity on any date, straight from your ledger. See [Balance Sheet](https://docs.frappe.io/erpnext/user/manual/en/balance-sheet).","Activos, pasivos y patrimonio a cualquier fecha, tomados directamente de su libro mayor. Ver [Balance general](https://docs.frappe.io/erpnext/user/manual/en/balance-sheet)."
+Back to sign in,Volver a iniciar sesión
+"Bill your customer for the item. Submit it, then use **Print** to see it on paper or send it as a PDF. See [Sales Invoice](https://docs.frappe.io/erpnext/user/manual/en/sales-invoice).",Facture el producto a su cliente. Valídela y use **Imprimir** para verla en papel o enviarla en PDF. Ver [Factura de venta](https://docs.frappe.io/erpnext/user/manual/en/sales-invoice).
+Break a project into tasks and log the time your team spends.,Divida un proyecto en tareas y registre el tiempo que dedica su equipo.
+Break it into tasks,Divídalo en tareas
+Check its depreciation,Revise su depreciación
+Check what you owe,Revise lo que debe
+"Check your chart of accounts and taxes, and add the bank account you use.","Revise su plan de cuentas y sus impuestos, y agregue la cuenta bancaria que usa."
+Check your profit,Revise su utilidad
+Check your stock levels,Revise sus niveles de inventario
+"Compare the results against the goal, and decide what to change. See [Quality Management](https://docs.frappe.io/erpnext/user/manual/en/quality-management).",Compare los resultados con la meta y decida qué cambiar. Ver [Gestión de calidad](https://docs.frappe.io/erpnext/user/manual/en/quality-management).
+"Computers, vehicles, furniture: how each kind depreciates, and which accounts it posts to. See [Asset Category](https://docs.frappe.io/erpnext/user/manual/en/asset-category).","Computadores, vehículos, muebles: cómo se deprecia cada tipo y a qué cuentas contabiliza. Ver [Categoría de activo](https://docs.frappe.io/erpnext/user/manual/en/asset-category)."
+Confirm a sales order,Confirme una orden de venta
+Confirm what the customer ordered and when it is due. Deliver and invoice from the order itself. See [Sales Order](https://docs.frappe.io/erpnext/user/manual/en/sales-order).,Confirme lo que pidió el cliente y para cuándo es. Entregue y facture desde la misma orden. Ver [Orden de venta](https://docs.frappe.io/erpnext/user/manual/en/sales-order).
+Create Asset Maintenance,Crear mantenimiento de activo
+Create Asset Movement,Crear movimiento de activo
+Create BOM,Crear lista de materiales
+Create Maintenance Schedule,Crear programa de mantenimiento
+Create Non Conformance,Crear no conformidad
+Create Production Plan,Crear plan de producción
+Create Project Template,Crear plantilla de proyecto
+Create Quality Goal,Crear meta de calidad
+Create Quality Inspection,Crear inspección de calidad
+Create Quality Inspection Template,Crear plantilla de inspección de calidad
+Create Quality Procedure,Crear procedimiento de calidad
+Create Quality Review,Crear revisión de calidad
+Create Stock Reconciliation,Crear conciliación de inventario
+Create Task,Crear tarea
+Decide how many to make. The raw materials you need are worked out from the BOM. See [Work Order](https://docs.frappe.io/erpnext/user/manual/en/work-order).,Decida cuántas unidades fabricar. Las materias primas que necesita salen de la lista de materiales. Ver [Orden de trabajo](https://docs.frappe.io/erpnext/user/manual/en/work-order).
+Decide what to check,Decida qué revisar
+"Depreciation is posted on schedule, asset by asset, without a journal entry from you. See [Depreciation](https://docs.frappe.io/erpnext/user/manual/en/asset-depreciation).","La depreciación se contabiliza según el calendario, activo por activo, sin que usted haga un asiento. Ver [Depreciación](https://docs.frappe.io/erpnext/user/manual/en/asset-depreciation)."
+Didn't receive the link?,¿No recibió el enlace?
+Done: {0},Hecho: {0}
+Enter a supplier's bill,Registre una factura de proveedor
+Enter the stock you have today,Registre el inventario que tiene hoy
+Enter their bill,Registre su factura
+"Every movement of every item, in and out, with the balance after each. See [Stock Ledger](https://docs.frappe.io/erpnext/user/manual/en/stock-ledger).","Cada movimiento de cada producto, de entrada y de salida, con el saldo después de cada uno. Ver [Libro de inventario](https://docs.frappe.io/erpnext/user/manual/en/stock-ledger)."
+"Every posting from your invoices and payments, with its debit and credit. See [General Ledger](https://docs.frappe.io/erpnext/user/manual/en/general-ledger).","Cada registro de sus facturas y pagos, con su débito y su crédito. Ver [Libro mayor](https://docs.frappe.io/erpnext/user/manual/en/general-ledger)."
+"Every work order, how far along it is, and what is running late. See [Work Order Summary](https://docs.frappe.io/erpnext/user/manual/en/work-order-summary).","Cada orden de trabajo, cuánto avanza y qué va atrasado. Ver [Resumen de órdenes de trabajo](https://docs.frappe.io/erpnext/user/manual/en/work-order-summary)."
+Finish making it,Termine de fabricarlo
+Follow every movement,Siga cada movimiento
+Follow up on unpaid invoices,Haga seguimiento a las facturas sin pagar
+"For anything that isn't an invoice or a payment: accruals, depreciation, or fixing a mistake. See [Journal Entry](https://docs.frappe.io/erpnext/user/manual/en/journal-entry).","Para lo que no es una factura ni un pago: causaciones, depreciación o la corrección de un error. Ver [Asiento contable](https://docs.frappe.io/erpnext/user/manual/en/journal-entry)."
+Forgot password?,¿Olvidó su contraseña?
+"From the store to the shop floor, or between branches. See [Stock Entry](https://docs.frappe.io/erpnext/user/manual/en/stock-entry).","De la bodega a la planta, o entre sedes. Ver [Movimiento de inventario](https://docs.frappe.io/erpnext/user/manual/en/stock-entry)."
+Get paid,Reciba el pago
+Get to know ERPNext,Conozca ERPNext
+Get your books ready,Prepare sus libros
+Good afternoon,Buenas tardes
+"Good afternoon, {0}","Buenas tardes, {0}"
+Good evening,Buenas noches
+"Good evening, {0}","Buenas noches, {0}"
+Good morning,Buenos días
+"Good morning, {0}","Buenos días, {0}"
+Goods or services you buy from suppliers. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).,Bienes o servicios que compra a sus proveedores. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item).
+Hand it to a person or place,Entrégueselo a una persona o lugar
+"How much of each item is on your shelves, and what it is worth. From here, every receipt and delivery keeps it up to date. See [Stock Reconciliation](https://docs.frappe.io/erpnext/user/manual/en/stock-reconciliation).","Cuánto hay de cada producto en sus estantes y cuánto vale. Desde aquí, cada entrada y cada entrega lo mantienen al día. Ver [Conciliación de inventario](https://docs.frappe.io/erpnext/user/manual/en/stock-reconciliation)."
+"Import a statement from your bank and pair each line with a payment, so your books agree with it. See [Bank Reconciliation](https://docs.frappe.io/erpnext/user/manual/en/bank-reconciliation).","Importe un extracto de su banco y cruce cada línea con un pago, para que sus libros cuadren con él. Ver [Conciliación bancaria](https://docs.frappe.io/erpnext/user/manual/en/bank-reconciliation)."
+"Income against expenses for any period, built from every invoice and payment you have recorded.","Ingresos frente a gastos de cualquier periodo, calculados con cada factura y pago que ha registrado."
+Inspect goods coming in or going out,Inspeccione la mercancía que entra o sale
+Invite your team,Invite a su equipo
+It clears their bill and takes the money out of your bank or cash account. See [Payment Entry](https://docs.frappe.io/erpnext/user/manual/en/payment-entry).,Salda la factura y saca el dinero de su cuenta bancaria o de caja. Ver [Entrada de pago](https://docs.frappe.io/erpnext/user/manual/en/payment-entry).
+"It posts the expense, and what you owe the supplier, to your ledger. See [Purchase Invoice](https://docs.frappe.io/erpnext/user/manual/en/purchase-invoice).","Contabiliza el gasto, y lo que le debe al proveedor, en su libro mayor. Ver [Factura de compra](https://docs.frappe.io/erpnext/user/manual/en/purchase-invoice)."
+Keep quality in check,Mantenga la calidad bajo control
+Keep track of your stock,Lleve el control de su inventario
+Know what you own and owe,Sepa lo que tiene y lo que debe
+Let's setup your account.,Configuremos su cuenta.
+Log a problem,Registre un problema
+Log time against it,Regístrele tiempo
+Login with password,Iniciar sesión con contraseña
+Make your first sale,Haga su primera venta
+Match your bank statement,Concilie su extracto bancario
+Move stock between warehouses,Mueva inventario entre bodegas
+"Note down a price a supplier offered, so you can compare suppliers before you order. See [Supplier Quotation](https://docs.frappe.io/erpnext/user/manual/en/supplier-quotation).","Anote un precio que le ofreció un proveedor, para comparar proveedores antes de pedir. Ver [Cotización de proveedor](https://docs.frappe.io/erpnext/user/manual/en/supplier-quotation)."
+"Once the customer agrees, turn it into a sales order or an invoice from the quotation itself. See [Quotation](https://docs.frappe.io/erpnext/user/manual/en/quotation).","Cuando el cliente acepte, conviértala en una orden de venta o una factura desde la misma cotización. Ver [Cotización](https://docs.frappe.io/erpnext/user/manual/en/quotation)."
+Open Accounts,Abrir Contabilidad
+Open Accounts Payable,Abrir Cuentas por pagar
+Open Accounts Receivable,Abrir Cuentas por cobrar
+Open Asset Depreciation Ledger,Abrir Libro de depreciación de activos
+Open Assets,Abrir Activos
+Open Balance Sheet,Abrir Balance general
+Open Banking,Abrir Bancos
+Open Buying,Abrir Compras
+Open Chart of Accounts,Abrir Plan de cuentas
+Open Delayed Tasks Summary,Abrir Resumen de tareas atrasadas
+Open Fixed Asset Register,Abrir Registro de activos fijos
+Open General Ledger,Abrir Libro mayor
+Open Manufacturing,Abrir Manufactura
+Open Profit and Loss,Abrir Estado de resultados
+Open Project Summary,Abrir Resumen de proyectos
+Open Purchase Order Analysis,Abrir Análisis de órdenes de compra
+Open Quality,Abrir Calidad
+Open Sales Analytics,Abrir Análisis de ventas
+Open Sales Taxes and Charges Template,Abrir Plantilla de impuestos y cargos de venta
+Open Selling,Abrir Ventas
+Open Stock,Abrir Inventario
+Open Stock Balance,Abrir Saldo de inventario
+Open Stock Ledger,Abrir Libro de inventario
+Open Warehouse,Abrir Bodega
+Open Work Order Summary,Abrir Resumen de órdenes de trabajo
+Optional,Opcional
+"Order from the supplier. When the goods arrive, receive them and record the bill from the order itself. See [Purchase Order](https://docs.frappe.io/erpnext/user/manual/en/purchase-order).","Haga el pedido al proveedor. Cuando llegue la mercancía, recíbala y registre la factura desde el mismo pedido. Ver [Orden de compra](https://docs.frappe.io/erpnext/user/manual/en/purchase-order)."
+Order from your suppliers,Haga pedidos a sus proveedores
+Pay your supplier,Pague a su proveedor
+Place a purchase order,Haga una orden de compra
+Plan a work order,Planee una orden de trabajo
+Plan and deliver projects,Planee y entregue proyectos
+Plan and run production,Planee y ejecute la producción
+Plan maintenance visits,Planee visitas de mantenimiento
+Plan production from your orders,Planee la producción a partir de sus pedidos
+Play video,Reproducir video
+Please check your email.,Revise su correo.
+"Please enter your email, we'll send you password reset link",Escriba su correo y le enviaremos un enlace para restablecer la contraseña
+Post a journal entry,Registre un asiento contable
+"Progress, hours and costs for every project.","Avance, horas y costos de cada proyecto."
+"Pull in open sales orders and work out what to make, and what to buy, to fill them.","Traiga las órdenes de venta abiertas y calcule qué fabricar, y qué comprar, para cumplirlas."
+Quote a price,Cotice un precio
+"Raw materials come out of stock and the finished products go in. From the work order, **Finish** fills this in for you. See [Stock Entry](https://docs.frappe.io/erpnext/user/manual/en/stock-entry).","Las materias primas salen del inventario y los productos terminados entran. Desde la orden de trabajo, **Terminar** lo llena por usted. Ver [Movimiento de inventario](https://docs.frappe.io/erpnext/user/manual/en/stock-entry)."
+Receive goods from a supplier,Reciba mercancía de un proveedor
+Record a supplier's quote,Registre la cotización de un proveedor
+Record an asset and see what it's worth year by year.,Registre un activo y vea cuánto vale año por año.
+Record an asset you already own,Registre un activo que ya tiene
+Record the hours spent on tasks. Bill them to the customer or use them to cost the project. See [Timesheet](https://docs.frappe.io/erpnext/user/manual/en/timesheets).,Registre las horas dedicadas a las tareas. Factúrelas al cliente o úselas para costear el proyecto. Ver [Hoja de tiempo](https://docs.frappe.io/erpnext/user/manual/en/timesheets).
+"Record the results against a receipt or a delivery, and accept or reject the goods. See [Quality Inspection](https://docs.frappe.io/erpnext/user/manual/en/quality-inspection).","Registre los resultados contra una entrada o una entrega, y acepte o rechace la mercancía. Ver [Inspección de calidad](https://docs.frappe.io/erpnext/user/manual/en/quality-inspection)."
+"Record who has it and where it is, so you always know. See [Asset Movement](https://docs.frappe.io/erpnext/user/manual/en/asset-movement).","Registre quién lo tiene y dónde está, para saberlo siempre. Ver [Movimiento de activo](https://docs.frappe.io/erpnext/user/manual/en/asset-movement)."
+"Regular service visits for equipment you sold, planned ahead for the whole contract. See [Maintenance Schedule](https://docs.frappe.io/erpnext/user/manual/en/maintenance-schedule).","Visitas de servicio periódicas a los equipos que vendió, planeadas para todo el contrato. Ver [Programa de mantenimiento](https://docs.frappe.io/erpnext/user/manual/en/maintenance-schedule)."
+Resend,Reenviar
+Reuse it as a template,Reutilícelo como plantilla
+Review how a goal is going,Revise cómo va una meta
+Review your chart of accounts,Revise su plan de cuentas
+Review your taxes,Revise sus impuestos
+Review your warehouses,Revise sus bodegas
+"Sales by customer, item or territory, over any period. See [Sales Analytics](https://docs.frappe.io/erpnext/user/manual/en/sales-analytics).","Ventas por cliente, producto o territorio, en cualquier periodo. Ver [Análisis de ventas](https://docs.frappe.io/erpnext/user/manual/en/sales-analytics)."
+"Save the tasks you repeat on every job, and start the next project from them.",Guarde las tareas que repite en cada trabajo y empiece el siguiente proyecto a partir de ellas.
+Schedule its upkeep,Programe su mantenimiento
+See everything you own,Vea todo lo que tiene
+See how production is going,Vea cómo va la producción
+Send Link,Enviar enlace
+Send your first invoice,Envíe su primera factura
+"Servicing, inspections and calibration, with reminders to the team doing it. See [Asset Maintenance](https://docs.frappe.io/erpnext/user/manual/en/asset-maintenance).","Servicio, inspecciones y calibración, con recordatorios para el equipo que lo hace. Ver [Mantenimiento de activos](https://docs.frappe.io/erpnext/user/manual/en/asset-maintenance)."
+Set a quality goal,Defina una meta de calidad
+Set up an asset category,Configure una categoría de activo
+Set up an inspection and record your first check.,Configure una inspección y registre su primera revisión.
+Set up your warehouses and enter the stock you have today.,Configure sus bodegas y registre el inventario que tiene hoy.
+Ship to a customer,Despache a un cliente
+"Something you bought before using ERPNext, with what you paid, where it is, and how much has already depreciated. See [Asset](https://docs.frappe.io/erpnext/user/manual/en/asset).","Algo que compró antes de usar ERPNext, con lo que pagó, dónde está y cuánto se ha depreciado. Ver [Activo](https://docs.frappe.io/erpnext/user/manual/en/asset)."
+"Something you use to make your products, kept in the Raw Material group. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).","Algo que usa para fabricar sus productos, guardado en el grupo Materia prima. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item)."
+"Something you want to measure and improve, like on-time delivery or returns, reviewed on a schedule you choose. See [Quality Management](https://docs.frappe.io/erpnext/user/manual/en/quality-management).","Algo que quiere medir y mejorar, como las entregas a tiempo o las devoluciones, revisado con la frecuencia que elija. Ver [Gestión de calidad](https://docs.frappe.io/erpnext/user/manual/en/quality-management)."
+Spot delayed tasks,Detecte tareas atrasadas
+Spot your best sellers,Descubra lo que más vende
+Start a project,Empiece un proyecto
+"Stock goes down as the goods leave, and the invoice can be made from the delivery. See [Delivery Note](https://docs.frappe.io/erpnext/user/manual/en/delivery-note).","El inventario baja cuando sale la mercancía, y la factura se puede hacer desde la remisión. Ver [Remisión](https://docs.frappe.io/erpnext/user/manual/en/delivery-note)."
+"Stock goes up in the warehouse you receive into, and the bill can be made from the receipt. See [Purchase Receipt](https://docs.frappe.io/erpnext/user/manual/en/purchase-receipt).","El inventario sube en la bodega donde recibe, y la factura se puede hacer desde el recibo. Ver [Recibo de compra](https://docs.frappe.io/erpnext/user/manual/en/purchase-receipt)."
+Submit it to finish this step.,Valídelo para terminar este paso.
+"Tasks past their due date, and how late each one is.",Tareas vencidas y cuánto se ha atrasado cada una.
+"The account your customers pay into and you pay from, linked to its account in your chart of accounts. See [Bank Account](https://docs.frappe.io/erpnext/user/manual/en/bank-account).","La cuenta en la que le pagan sus clientes y desde la que usted paga, enlazada a su cuenta en el plan de cuentas. Ver [Cuenta bancaria](https://docs.frappe.io/erpnext/user/manual/en/bank-account)."
+"The bill your supplier sent, so you know what you owe and when it is due. See [Purchase Invoice](https://docs.frappe.io/erpnext/user/manual/en/purchase-invoice).","La factura que le envió su proveedor, para saber cuánto debe y cuándo vence. Ver [Factura de compra](https://docs.frappe.io/erpnext/user/manual/en/purchase-invoice)."
+"The kind of thing you own, marked as a fixed asset. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).","El tipo de bien que tiene, marcado como activo fijo. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item)."
+"The parameters to inspect and what counts as a pass, reused on every inspection. See [Quality Inspection Template](https://docs.frappe.io/erpnext/user/manual/en/quality-inspection-template).","Los parámetros a inspeccionar y qué cuenta como aprobado, reutilizados en cada inspección. Ver [Plantilla de inspección de calidad](https://docs.frappe.io/erpnext/user/manual/en/quality-inspection-template)."
+"The raw materials, and how much of each, that go into one unit of your product. Submit it to use it in production. See [BOM](https://docs.frappe.io/erpnext/user/manual/en/bill-of-materials).
+
+Sending some of the work to a supplier? See [Subcontracting](https://docs.frappe.io/erpnext/user/manual/en/subcontracting).","Las materias primas, y cuánto de cada una, que lleva una unidad de su producto. Valídela para usarla en producción. Ver [Lista de materiales](https://docs.frappe.io/erpnext/user/manual/en/bill-of-materials).
+
+¿Envía parte del trabajo a un proveedor? Ver [Subcontratación](https://docs.frappe.io/erpnext/user/manual/en/subcontracting)."
+"The steps your team follows, so it is done the same way every time. See [Quality Management](https://docs.frappe.io/erpnext/user/manual/en/quality-management).","Los pasos que sigue su equipo, para que el trabajo se haga igual cada vez. Ver [Gestión de calidad](https://docs.frappe.io/erpnext/user/manual/en/quality-management)."
+The taxes that fill in on every invoice. We added your country's where we had them; check the rates match what you charge. Purchase taxes live in [Purchase Taxes and Charges Template](/desk/purchase-taxes-and-charges-template). See [Setting Up Taxes](https://docs.frappe.io/erpnext/user/manual/en/setting-up-taxes).,Los impuestos que se llenan en cada factura. Agregamos los de su país cuando los teníamos; revise que las tarifas coincidan con lo que cobra. Los impuestos de compra están en [Plantilla de impuestos y cargos de compra](/desk/purchase-taxes-and-charges-template). Ver [Configuración de impuestos](https://docs.frappe.io/erpnext/user/manual/en/setting-up-taxes).
+Trace every posting,Rastree cada registro
+Track progress and costs,Haga seguimiento al avance y los costos
+Track what your business owns,Lleve el control de lo que tiene su empresa
+Track your orders,Haga seguimiento a sus pedidos
+"We created a few to start with. Rename them, or add the places you actually keep stock. See [Warehouse](https://docs.frappe.io/erpnext/user/manual/en/warehouse).",Creamos algunas para empezar. Cámbieles el nombre o agregue los lugares donde guarda inventario. Ver [Bodega](https://docs.frappe.io/erpnext/user/manual/en/warehouse).
+"We set up a standard chart of accounts for your country. See how your accounts are grouped, and rename or add any to match how you report. See [Chart of Accounts](https://docs.frappe.io/erpnext/user/manual/en/chart-of-accounts).",Configuramos un plan de cuentas estándar para su país. Vea cómo se agrupan sus cuentas y cambie el nombre o agregue las que necesite según cómo reporta. Ver [Plan de cuentas](https://docs.frappe.io/erpnext/user/manual/en/chart-of-accounts).
+"What comes out at the end of production, kept in the Products group. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item).","Lo que sale al final de la producción, guardado en el grupo Productos. Ver [Producto](https://docs.frappe.io/erpnext/user/manual/en/item)."
+"What you have in each warehouse, and what it is worth.",Lo que tiene en cada bodega y cuánto vale.
+"What you ordered, what has arrived, and what is still to come.","Lo que pidió, lo que ha llegado y lo que falta por llegar."
+"What you own, where it is, and what it is worth today.","Lo que tiene, dónde está y cuánto vale hoy."
+"When something falls short of the procedure, note what happened, the cause, and what you will do about it. See [Non Conformance](https://docs.frappe.io/erpnext/user/manual/en/non-conformance).","Cuando algo no cumple el procedimiento, anote qué pasó, la causa y qué va a hacer al respecto. Ver [No conformidad](https://docs.frappe.io/erpnext/user/manual/en/non-conformance)."
+"When your customer pays, record it here. It is matched against their invoice, so you can see what is still owed. See [Payment Entry](https://docs.frappe.io/erpnext/user/manual/en/payment-entry).","Cuando su cliente pague, regístrelo aquí. Se cruza con su factura, para que vea lo que todavía le deben. Ver [Entrada de pago](https://docs.frappe.io/erpnext/user/manual/en/payment-entry)."
+"Who does what, by when. Tasks roll up into the project's progress. See [Task](https://docs.frappe.io/erpnext/user/manual/en/task).",Quién hace qué y para cuándo. Las tareas suman al avance del proyecto. Ver [Tarea](https://docs.frappe.io/erpnext/user/manual/en/task).
+"Who owes you, how much, and for how long. See [Accounts Receivable](https://docs.frappe.io/erpnext/user/manual/en/accounts-receivable).","Quién le debe, cuánto y desde hace cuánto. Ver [Cuentas por cobrar](https://docs.frappe.io/erpnext/user/manual/en/accounts-receivable)."
+"Who you owe, how much, and when each bill is due.","A quién le debe, cuánto y cuándo vence cada factura."
+Write down how the work is done,Escriba cómo se hace el trabajo
+Write down what goes into a product and make it with a work order.,Escriba qué lleva un producto y fabríquelo con una orden de trabajo.
+Write its bill of materials,Escriba su lista de materiales
+You're all set.,Todo listo.
+YouTube video player,Reproductor de video de YouTube
+{0} of {1} done · {2} skipped,{0} de {1} hechos · {2} omitidos
+{0} of {1} steps done,{0} de {1} pasos hechos
+Sign In,Iniciar sesión
+Welcome! Please sign in to continue.,¡Bienvenido! Inicie sesión para continuar.
+How long your unpaid supplier bills have been due.,Hace cuánto vencieron las facturas de proveedores que no ha pagado.
+How long your customers' unpaid invoices have been due.,Hace cuánto vencieron las facturas que sus clientes no han pagado.
+"How much money sits in your bank accounts, month by month.","Cuánto dinero hay en sus cuentas bancarias, mes a mes."
+Your budgets against what you actually spent.,Sus presupuestos frente a lo que de verdad gastó.
+What your suppliers bill you each month.,Lo que le facturan sus proveedores cada mes.
+What you bill your customers each month.,Lo que factura a sus clientes cada mes.
+"Your income and expenses over the year, and what's left as profit.","Sus ingresos y gastos del año, y lo que queda de utilidad."
+"What your assets are worth, year by year.","Cuánto valen sus activos, año por año."
+"What your assets are worth, by category.","Cuánto valen sus activos, por categoría."
+"What your assets are worth, by location.","Cuánto valen sus activos, por ubicación."
+"Your material requests by status, from pending to ordered.","Sus solicitudes de material por estado, de pendiente a pedida."
+"Where your purchase orders stand: to receive, to bill, or done.","En qué van sus órdenes de compra: por recibir, por facturar o terminadas."
+How much you order from suppliers each month.,Cuánto le pide a sus proveedores cada mes.
+"Your suppliers, ranked by what they deliver to you.","Sus proveedores, ordenados por lo que le entregan."
+New leads coming in each week.,Prospectos nuevos que llegan cada semana.
+Where your leads come from.,De dónde vienen sus prospectos.
+Which campaigns bring in your opportunities.,Qué campañas le traen oportunidades.
+New opportunities coming in each week.,Oportunidades nuevas que llegan cada semana.
+How many opportunities each territory brings in.,Cuántas oportunidades trae cada territorio.
+The value of opportunities you win in each territory.,El valor de las oportunidades que gana en cada territorio.
+The opportunities you win each month.,Las oportunidades que gana cada mes.
+Operations completed on your work orders each quarter.,Operaciones terminadas en sus órdenes de trabajo cada trimestre.
+"Your job cards each month, by status.","Sus tarjetas de trabajo de cada mes, por estado."
+How long your workstations were down last month.,Cuánto tiempo estuvieron paradas sus estaciones de trabajo el mes pasado.
+How long your open work orders have been waiting.,Cuánto llevan esperando sus órdenes de trabajo abiertas.
+How much you produce each month.,Cuánto produce cada mes.
+How many of your inspections pass or fail.,Cuántas de sus inspecciones se aprueban o se rechazan.
+"Your work orders by status, from planned to completed.","Sus órdenes de trabajo por estado, de planeada a terminada."
+What your work orders planned against what they produced.,Lo que planearon sus órdenes de trabajo frente a lo que produjeron.
+The projects you finish each month.,Los proyectos que termina cada mes.
+How far along your open projects are.,Cuánto han avanzado sus proyectos abiertos.
+How many inspections you run each month.,Cuántas inspecciones hace cada mes.
+Your best-selling items over the year.,Los productos que más vendió en el año.
+Sales orders still waiting to be delivered or billed.,Órdenes de venta que aún esperan entrega o factura.
+How much your customers order each month.,Cuánto le piden sus clientes cada mes.
+"Your customers, ranked by what you deliver to them.","Sus clientes, ordenados por lo que les entrega."
+What you deliver to your customers each month.,Lo que entrega a sus clientes cada mes.
+Items you're about to run short of.,Productos que están por agotarse.
+The stock that has sat longest in your warehouses.,El inventario que lleva más tiempo quieto en sus bodegas.
+What you receive from suppliers each month.,Lo que recibe de sus proveedores cada mes.
+"What your stock is worth, by item group.","Cuánto vale su inventario, por grupo de productos."
+What your stock is worth in each warehouse.,Cuánto vale su inventario en cada bodega.
+What you send out for subcontracting each month.,Lo que envía a subcontratación cada mes.
+Support issues opened each month.,Casos de soporte abiertos cada mes.
