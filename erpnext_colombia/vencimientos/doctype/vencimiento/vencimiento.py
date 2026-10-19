@@ -12,6 +12,14 @@ COLORES = {
 }
 
 
+CLAVE = ("cliente", "obligacion", "anio", "periodo")
+
+
+def on_doctype_update():
+	# validate no alcanza: la tarea nocturna y un guardado pueden validar a la vez.
+	frappe.db.add_unique("Vencimiento", CLAVE, constraint_name="unico_por_periodo")
+
+
 class Vencimiento(Document):
 	def validate(self):
 		otro = frappe.db.get_value(

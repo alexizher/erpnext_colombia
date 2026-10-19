@@ -25,6 +25,16 @@ def execute(filters=None):
 		],
 		order_by="cliente_nombre, fecha_vencimiento",
 	)
+	nits = dict(
+		frappe.get_all(
+			"Tercero",
+			filters={"name": ("in", {f.tercero for f in filas if f.tercero})},
+			fields=["name", "nit_completo"],
+			as_list=True,
+		)
+	)
+	for f in filas:
+		f.nit = nits.get(f.tercero)
 	return columnas(), filas
 
 
@@ -38,7 +48,7 @@ def columnas():
 			"width": 140,
 		},
 		{"fieldname": "cliente_nombre", "label": _("Cliente"), "fieldtype": "Data", "width": 200},
-		{"fieldname": "tercero", "label": _("NIT"), "fieldtype": "Link", "options": "Tercero", "width": 120},
+		{"fieldname": "nit", "label": _("NIT"), "fieldtype": "Data", "width": 130},
 		{
 			"fieldname": "obligacion",
 			"label": _("Obligación"),

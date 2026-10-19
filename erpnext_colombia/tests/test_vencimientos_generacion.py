@@ -88,3 +88,29 @@ class TestGeneracion(IntegrationTestCase):
 		copia = frappe.copy_doc(original)
 		with self.assertRaisesRegex(frappe.ValidationError, original.name):
 			copia.insert()
+
+	def test_base_de_datos_impide_duplicado_aunque_no_pase_por_validate(self):
+		# La tarea nocturna y un guardado pueden validar a la vez: la validación sola no basta.
+		c = cliente_con("900200311", "Gen Once S.A.S.", obligacion())
+		generar(cliente=c, anio=2030)
+		copia = frappe.copy_doc(frappe.get_doc("Vencimiento", vencimientos_de(c)[0].name))
+		copia.set_new_name()
+		with self.assertRaises((frappe.UniqueValidationError, frappe.DuplicateEntryError)):
+			copia.db_insert()
+
+	def test_crear_un_vencimiento_que_ya_existe_no_falla(self):
+		c = cliente_con("900200312", "Gen Doce S.A.S.", obligacion())
+		generar(cliente=c, anio=2030)
+		v = vencimientos_de(c)[0]
+		f = frappe.get_doc("Fecha Tributaria", frappe.db.get_value("Vencimiento", v.name, "fecha_tributaria"))
+		generacion._crear(c, f)
+		self.assertEqual(len(vencimientos_de(c)), 2)
+
+	def test_guardar_cliente_con_problema_avisa_en_pantalla(self):
+		c = cliente_con("900200313", "Gen Trece S.A.S.", obligacion())
+		frappe.clear_messages()
+		with patch(
+			"erpnext_colombia.vencimientos.generacion.generar_cliente", side_effect=RuntimeError("dato malo")
+		):
+			generacion.al_guardar_cliente(frappe.get_doc("Customer", c))
+		self.assertIn("Gen Trece", " ".join(m.get("message", "") for m in frappe.get_message_log()))

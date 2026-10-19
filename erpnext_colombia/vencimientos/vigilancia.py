@@ -8,7 +8,7 @@ from frappe import _
 from frappe.utils import now_datetime
 
 from erpnext_colombia.vencimientos.reglas import CONFIGURACION
-from erpnext_colombia.vencimientos.resumen import destinatario
+from erpnext_colombia.vencimientos.resumen import correos_de_alerta, destinatarios
 
 # Contenido principal de las páginas SharePoint de la DIAN (estable entre visitas; el contador de visitas queda fuera).
 SELECTOR_PRINCIPAL = '[id$="RichHtmlField"]'
@@ -36,7 +36,8 @@ def huella(html: str) -> tuple[str, list[str]]:
 def _leer(url: str) -> tuple[str, list[str]]:
 	r = requests.get(url, headers={"User-Agent": AGENTE}, timeout=30)
 	r.raise_for_status()
-	if "pdf" in (r.headers.get("Content-Type") or "").lower():
+	# La DIAN a veces sirve el PDF como application/octet-stream: se reconoce también por su firma.
+	if r.content.startswith(b"%PDF") or "pdf" in (r.headers.get("Content-Type") or "").lower():
 		return hashlib.sha256(r.content).hexdigest(), []
 	return huella(r.text)
 
@@ -67,9 +68,9 @@ def revisar():
 
 
 def _avisar(conf, asunto, **args):
-	correos = [c.strip() for c in (conf.correos_alerta_dian or "").splitlines() if c.strip()] or [
-		destinatario()
-	]
+	correos = correos_de_alerta() or destinatarios()
+	if not correos:
+		return
 	frappe.sendmail(
 		recipients=correos, subject=asunto, template="alerta_dian", args={"asunto": asunto, **args}
 	)

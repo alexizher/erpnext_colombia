@@ -138,6 +138,17 @@ def _conciliar(cliente: str, anios: list[int], aplican: dict):
 
 
 def _crear(cliente: str, f):
+	clave = {"cliente": cliente, "obligacion": f.obligacion, "anio": f.anio, "periodo": f.periodo}
+	if frappe.db.exists("Vencimiento", clave):
+		return
+	try:
+		_insertar(cliente, f)
+	except (frappe.UniqueValidationError, frappe.DuplicateEntryError):
+		# Otro proceso (la tarea nocturna o un guardado) lo creó entre la lectura y esta escritura.
+		pass
+
+
+def _insertar(cliente: str, f):
 	frappe.get_doc(
 		{
 			"doctype": "Vencimiento",
@@ -178,4 +189,5 @@ def propagar_fecha(fecha_doc, anterior):
 
 
 def al_guardar_cliente(doc, method=None):
-	generar(cliente=doc.name)
+	if problemas := generar(cliente=doc.name):
+		frappe.msgprint("<br>".join(problemas), title=_("Vencimientos"), indicator="orange")

@@ -39,27 +39,37 @@ def datos(hoy=None) -> dict:
 	}
 
 
-def destinatario() -> str:
+def correos_de_alerta() -> list[str]:
+	texto = frappe.db.get_single_value(CONFIGURACION, "correos_alerta_dian") or ""
+	return [c.strip() for c in texto.splitlines() if c.strip()]
+
+
+def destinatarios() -> list[str]:
+	"""El responsable; si no tiene correo, los correos de alerta de la DIAN. Sin ninguno, nadie: el
+	correo del Administrator suele ser el de ejemplo y el resumen se perdería sin que nadie lo note."""
 	usuario = frappe.db.get_single_value(CONFIGURACION, "responsable")
 	correo = frappe.db.get_value("User", usuario, "email") if usuario else None
-	if not correo:
-		frappe.log_error(
-			title="Vencimientos: sin responsable",
-			message=_(
-				"La configuración de vencimientos no tiene responsable con correo; el resumen va al Administrator."
-			),
-		)
-		correo = frappe.db.get_value("User", "Administrator", "email")
-	return correo
-
-
-def enviar(hoy=None) -> str:
-	d = datos(hoy)
-	correo = destinatario()
-	frappe.sendmail(
-		recipients=[correo],
-		subject=_("Vencimientos: semana del {0}").format(formatdate(d["hoy"])),
-		template="resumen_vencimientos",
-		args=d,
+	if correo:
+		return [correo]
+	if alerta := correos_de_alerta():
+		return alerta
+	frappe.log_error(
+		title="Vencimientos: sin responsable",
+		message=_(
+			"La configuración de vencimientos no tiene responsable con correo ni correos de alerta; no se envió."
+		),
 	)
-	return correo
+	return []
+
+
+def enviar(hoy=None) -> list[str]:
+	d = datos(hoy)
+	correos = destinatarios()
+	if correos:
+		frappe.sendmail(
+			recipients=correos,
+			subject=_("Vencimientos: semana del {0}").format(formatdate(d["hoy"])),
+			template="resumen_vencimientos",
+			args=d,
+		)
+	return correos
