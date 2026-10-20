@@ -54,3 +54,20 @@ class TestTraducciones(IntegrationTestCase):
 
 	def test_las_traducciones_anteriores_siguen(self):
 		self.assertEqual(_("Obligacion Tributaria"), "Obligación tributaria")
+
+	def test_vista_de_oficina_en_espanol(self):
+		# El ícono y el menú de Contabilidad, y lo que muestra su inicio
+		self.assertEqual(_("Accounts"), "Contabilidad")
+		for texto in (
+			"Total Outgoing Bills",
+			"Total Incoming Bills",
+			"Total Incoming Payment",
+			"Receivables & Payables",
+			"Registers & Profitability",
+			"Budgeting",
+			"Configuracion de Honorarios",
+			"Honorarios por Cliente",
+			"Balance de Prueba por Tercero",
+			"Auxiliar por Tercero",
+		):
+			self.assertNotEqual(_(texto), texto, texto)
