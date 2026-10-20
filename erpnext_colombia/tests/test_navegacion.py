@@ -41,7 +41,9 @@ class TestNavegacion(IntegrationTestCase):
 	def test_estados_en_orden_contable_por_grupo(self):
 		from erpnext_colombia.navegacion import filas_de_contabilidad
 
-		reportes = [f["label"] for f in filas_de_contabilidad() if f.get("link_type") == "Report"]
+		reportes = [
+			f["label"] for f in filas_de_contabilidad() if f.get("link_type") == "Report" and f.get("filters")
+		]
 		self.assertEqual(
 			reportes,
 			[
@@ -64,3 +66,15 @@ class TestNavegacion(IntegrationTestCase):
 	def test_campos_de_empresa_solo_para_colombia(self):
 		for campo in CAMPOS["Company"]:
 			self.assertEqual(campo.get("depends_on"), "eval:doc.country=='Colombia'", campo["fieldname"])
+
+	def test_contabilidad_trae_los_libros_por_tercero(self):
+		configurar()
+		capa = frappe.get_doc("Custom Sidebar", {"module": "Accounts", "user": ""})
+		reportes = {i.link_to for i in capa.sidebar_items if i.added and i.link_type == "Report"}
+		self.assertIn("Balance de Prueba por Tercero", reportes)
+		self.assertIn("Auxiliar por Tercero", reportes)
+
+	def test_oficina_trae_honorarios_y_prospectos(self):
+		destinos = {i.link_to for i in frappe.get_doc("Sidebar", "Oficina").items}
+		for destino in ("Honorarios por Cliente", "Configuracion de Honorarios", "Sales Invoice", "Lead"):
+			self.assertIn(destino, destinos)

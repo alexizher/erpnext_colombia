@@ -11,6 +11,11 @@ from frappe.desk.doctype.custom_sidebar.custom_sidebar import add_site_sidebar_i
 MODULO_CONTABILIDAD = "Accounts"
 SECCION = "Terceros y NIIF"
 PREFIJO_PLANTILLA = "CO "
+# Van después de los estados: en un sitio que ya tiene la sección, las filas nuevas se agregan al final.
+LIBROS_POR_TERCERO = (
+	("Balance de prueba por tercero", "Balance de Prueba por Tercero"),
+	("Auxiliar por tercero", "Auxiliar por Tercero"),
+)
 
 
 def _seccion() -> dict:
@@ -50,6 +55,7 @@ def filas_de_contabilidad() -> list[dict]:
 		_seccion(),
 		_enlace("Terceros", "DocType", "Tercero", "users"),
 		*(_estado_financiero(p) for p in plantillas()),
+		*(_enlace(etiqueta, "Report", reporte, "book-open") for etiqueta, reporte in LIBROS_POR_TERCERO),
 	]
 
 

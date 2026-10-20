@@ -2,6 +2,8 @@ import re
 
 PESOS_DIAN = (3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71)
 TIPOS_ALFANUMERICOS = ("41", "42")
+# 42: documento de identificación extranjero; 43: sin identificación del exterior
+DOCUMENTOS_DEL_EXTERIOR = ("42", "43")
 
 
 def codigo_tipo(tipo: str) -> str:

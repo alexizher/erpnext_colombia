@@ -32,6 +32,12 @@ def configurar():
 	from erpnext_colombia.vencimientos import instalacion as vencimientos
 
 	vencimientos.configurar()
+	from erpnext_colombia.dian import crear_dian
+
+	crear_dian()
+	from erpnext_colombia.honorarios import instalacion as honorarios
+
+	honorarios.configurar()
 	from erpnext_colombia.navegacion import agregar_a_contabilidad
 
 	agregar_a_contabilidad()

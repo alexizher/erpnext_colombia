@@ -125,3 +125,67 @@ class TestTercero(IntegrationTestCase):
 	def test_numero_vacio_se_rechaza(self):
 		with self.assertRaisesRegex(frappe.ValidationError, "número de documento"):
 			nuevo_tercero(numero_documento=" .- ").insert()
+
+
+class TestTerceroDelExterior(IntegrationTestCase):
+	"""Clientes y proveedores de otros países también son terceros: la exógena los reporta."""
+
+	def setUp(self):
+		for numero in ("EXT77001", "EXT77002", "EXT77003", "444444901"):
+			if frappe.db.exists("Tercero", numero):
+				frappe.delete_doc("Tercero", numero, force=True, ignore_permissions=True)
+
+	def extranjero(self, **campos):
+		datos = {
+			"doctype": "Tercero",
+			"tipo_documento": "42 - Documento de identificación extranjero",
+			"numero_documento": "EXT77001",
+			"naturaleza": "Persona jurídica",
+			"razon_social": "Acme Inc.",
+			"pais": "United States",
+		}
+		datos.update(campos)
+		return frappe.get_doc(datos)
+
+	def test_pais_por_defecto_es_colombia(self):
+		t = nuevo_tercero(numero_documento="901000111").insert()
+		self.assertEqual(t.pais, "Colombia")
+
+	def test_empresa_extranjera_con_documento_42(self):
+		t = self.extranjero().insert()
+		self.assertEqual(t.name, "EXT77001")
+		self.assertEqual(t.pais, "United States")
+		self.assertIsNone(t.digito_verificacion)
+		self.assertEqual(t.nit_completo, "EXT77001")
+
+	def test_documento_extranjero_exige_otro_pais(self):
+		with self.assertRaisesRegex(frappe.ValidationError, "país"):
+			self.extranjero(numero_documento="EXT77002", pais="Colombia").insert()
+
+	def test_sin_identificacion_del_exterior(self):
+		t = self.extranjero(
+			tipo_documento="43 - Sin identificación del exterior", numero_documento="444444901", pais="Spain"
+		).insert()
+		self.assertEqual(t.name, "444444901")
+
+	def test_tipos_de_documento_de_la_exogena(self):
+		opciones = frappe.get_meta("Tercero").get_field("tipo_documento").options.split("\n")
+		codigos = {o[:2] for o in opciones if o}
+		for codigo in ("11", "12", "13", "21", "22", "31", "41", "42", "43", "47", "48"):
+			self.assertIn(codigo, codigos)
+
+	def test_cliente_del_exterior(self):
+		from erpnext_colombia.tests.utils import GRUPO_CLIENTE
+
+		t = self.extranjero(numero_documento="EXT77003").insert()
+		c = frappe.get_doc(
+			{
+				"doctype": "Customer",
+				"co_tercero": t.name,
+				"customer_group": GRUPO_CLIENTE,
+				"territory": "Rest Of The World",
+			}
+		).insert()
+		self.assertEqual(c.customer_name, "Acme Inc.")
+		self.assertEqual(c.customer_type, "Company")
+		frappe.delete_doc("Customer", c.name, force=True)

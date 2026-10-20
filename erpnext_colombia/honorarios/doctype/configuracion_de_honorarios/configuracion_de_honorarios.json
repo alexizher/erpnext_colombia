@@ -1,0 +1,27 @@
+{
+ "actions": [],
+ "creation": "2026-10-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["empresa", "articulo", "plantilla_impuestos", "column_break_1", "dia_de_facturacion", "dias_para_pagar"],
+ "fields": [
+  {"fieldname": "empresa", "fieldtype": "Link", "options": "Company", "label": "Empresa que factura", "description": "La oficina. Sin empresa no se generan facturas."},
+  {"fieldname": "articulo", "fieldtype": "Link", "options": "Item", "label": "Artículo", "description": "El servicio con el que sale cada línea de la factura."},
+  {"fieldname": "plantilla_impuestos", "fieldtype": "Link", "options": "Sales Taxes and Charges Template", "label": "Plantilla de impuestos", "description": "Por ejemplo, IVA 19 %. Vacía si los honorarios no llevan IVA."},
+  {"fieldname": "column_break_1", "fieldtype": "Column Break"},
+  {"default": "1", "fieldname": "dia_de_facturacion", "fieldtype": "Int", "label": "Día de facturación", "description": "Desde este día del mes se crean los borradores. Entre 1 y 28."},
+  {"default": "10", "fieldname": "dias_para_pagar", "fieldtype": "Int", "label": "Días para pagar", "non_negative": 1}
+ ],
+ "issingle": 1,
+ "modified": "2026-10-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Honorarios",
+ "name": "Configuracion de Honorarios",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "read": 1, "role": "System Manager", "write": 1},
+  {"create": 1, "read": 1, "role": "Accounts Manager", "write": 1}
+ ],
+ "states": [],
+ "track_changes": 1
+}

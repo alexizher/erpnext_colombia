@@ -4,12 +4,26 @@ Localización colombiana para ERPNext: PUC, terceros, impuestos, DIAN y exógena
 
 ### Dónde está cada cosa
 
-- **Oficina**, en la barra de íconos de ERPNext: el tablero de vencimientos, los vencimientos, los clientes, el reporte por cliente y, en Configuración, las fechas tributarias y las obligaciones.
-- **Contabilidad → Terceros y NIIF**, al final del menú: los terceros y los estados financieros de los grupos 2 y 3, cada uno abierto con su plantilla.
+- **Oficina**, en la barra de íconos de ERPNext: el tablero de vencimientos, los vencimientos, los clientes, el reporte por cliente, los honorarios (facturas y reporte por cliente), los prospectos y, en Configuración, las fechas tributarias, las obligaciones y la configuración de vencimientos y de honorarios.
+- **Contabilidad → Terceros y NIIF**, al final del menú: los terceros, los estados financieros de los grupos 2 y 3 (cada uno abierto con su plantilla), el balance de prueba por tercero y el auxiliar por tercero.
 
 Las reglas contables (tercero obligatorio en las cuentas 13 y 22 a 25, clasificación NIIF, tercero en facturas, pagos y asientos) aplican solo a las empresas con país Colombia que usan el PUC. Los campos de tercero y certificación de la Ley 222 solo aparecen en la ficha de una empresa colombiana.
 
 Al crear una empresa colombiana con la plantilla "Colombia PUC", la app corrige las cuentas por defecto que ERPNext deja mal (por cobrar 130505, por pagar 2205, recibido no facturado 233595, redondeo 429581, entre otras) y apaga el inventario perpetuo. Solo pasa al crearla: los cambios que se hagan después en la empresa se respetan.
+
+### Terceros
+
+Todo cliente y proveedor tiene un tercero, también los del exterior: la dimensión contable y la exógena lo necesitan. Un extranjero se registra con el documento 42 (identificación extranjera) o 43 (sin identificación del exterior) y su país. La DIAN (800197268-4) queda creada como tercero y proveedor para las retenciones y los pagos de impuestos.
+
+El **balance de prueba por tercero** da por cuenta y tercero el saldo inicial, los débitos, los créditos y el saldo final. El **auxiliar por tercero** lista los movimientos con su saldo corrido. Los dos aceptan una cuenta de grupo y traen sus subcuentas. Como en ERPNext, lo marcado como apertura cuenta como saldo inicial.
+
+### Honorarios
+
+En la ficha del cliente, sección "Honorarios", se anota lo que se le cobra: concepto, valor, periodicidad (mensual, bimestral, trimestral, semestral, anual o una vez) y desde cuándo. Desde el día de facturación de cada mes, la app crea una factura de venta en borrador por cliente con lo que toca ese mes. Daniela la revisa y la envía. Un mes ya facturado no se vuelve a generar, aunque su factura se cancele.
+
+Se configura en "Configuración de honorarios": empresa que factura, artículo (la app crea "HONORARIOS"), plantilla de impuestos, día de facturación y días para pagar. El botón "Generar las facturas de este mes" no espera al día de facturación. El reporte "Honorarios por cliente" muestra lo facturado, lo pagado, el saldo y desde cuándo debe cada uno.
+
+En un prospecto (Lead) se anotan los servicios que le interesan y el honorario propuesto. Al crear el cliente desde el prospecto, ese valor pasa a sus honorarios como cobro mensual desde el mes siguiente.
 
 ### Traducción
 

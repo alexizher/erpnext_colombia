@@ -279,8 +279,14 @@ before_tests = "erpnext_colombia.tests.utils.preparar_sitio"
 
 doc_events = {
 	"Customer": {
-		"before_insert": "erpnext_colombia.partes.antes_de_insertar",
-		"validate": "erpnext_colombia.partes.validar_parte",
+		"before_insert": [
+			"erpnext_colombia.partes.antes_de_insertar",
+			"erpnext_colombia.honorarios.prospectos.al_crear_cliente",
+		],
+		"validate": [
+			"erpnext_colombia.partes.validar_parte",
+			"erpnext_colombia.honorarios.facturacion.validar_cliente",
+		],
 		"on_update": "erpnext_colombia.vencimientos.generacion.al_guardar_cliente",
 	},
 	"Supplier": {
@@ -307,7 +313,10 @@ override_doctype_dashboards = {
 }
 
 scheduler_events = {
-	"daily": ["erpnext_colombia.vencimientos.tareas.diaria"],
+	"daily": [
+		"erpnext_colombia.vencimientos.tareas.diaria",
+		"erpnext_colombia.honorarios.tareas.diaria",
+	],
 	"cron": {
 		"0 6 * * 1": ["erpnext_colombia.vencimientos.tareas.vigilancia_semanal"],
 		"0 7 * * 1": ["erpnext_colombia.vencimientos.tareas.resumen_semanal"],
