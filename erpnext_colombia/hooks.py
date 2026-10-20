@@ -277,6 +277,25 @@ after_install = "erpnext_colombia.instalacion.after_install"
 after_migrate = "erpnext_colombia.instalacion.after_migrate"
 before_tests = "erpnext_colombia.tests.utils.preparar_sitio"
 
+# Estos módulos no traen menú propio: su navegación está en Oficina y en Contabilidad. Sin esto
+# Frappe arma un menú automático por módulo, con los nombres de las tablas, y abre ahí sus pantallas.
+code_only_modules = {
+	"Vencimientos": ["Oficina"],
+	"Honorarios": ["Oficina"],
+	"ERPNext Colombia": ["Accounts"],
+}
+
+# Sin lugar propio en la pantalla de apps (Oficina va en la barra de ERPNext); sirve para que
+# quien tenga la vista de oficina entre por su tablero (User.default_app).
+add_to_apps_screen = [
+	{
+		"name": app_name,
+		"logo": "/assets/erpnext_colombia/images/oficina.svg",
+		"title": "Oficina",
+		"route": "/desk/dashboard-view/Vencimientos",
+	}
+]
+
 doc_events = {
 	"Customer": {
 		"before_insert": [
@@ -300,6 +319,10 @@ doc_events = {
 			"erpnext_colombia.cuentas.al_guardar_empresa",
 			"erpnext_colombia.membrete.al_guardar_empresa",
 		],
+	},
+	"User": {
+		"validate": "erpnext_colombia.oficina.perfil.al_validar_usuario",
+		"on_update": "erpnext_colombia.oficina.perfil.al_guardar_usuario",
 	},
 	"Sales Invoice": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
 	"Purchase Invoice": {"validate": "erpnext_colombia.movimientos.completar_tercero"},
