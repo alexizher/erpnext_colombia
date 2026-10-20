@@ -12,6 +12,9 @@ RAICES_DE_BALANCE = ("Asset", "Liability")
 CUENTAS_POR_DEFECTO = {
 	"default_receivable_account": "130505",
 	"default_payable_account": "2205",
+	# ERPNext deja la primera de ingresos del PUC, 410505 Cultivo de cereales. Consultoría sirve a
+	# una oficina de servicios; una empresa de otra actividad la cambia en su ficha.
+	"default_income_account": "415550",
 	"default_expense_account": "519595",
 	"default_cash_account": "110505",
 	"default_bank_account": "111005",
