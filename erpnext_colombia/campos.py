@@ -51,6 +51,21 @@ CAMPOS = {
 			"options": "Obligacion del Cliente",
 			"insert_after": "co_empresa_contable",
 		},
+		{
+			"fieldname": "co_seccion_honorarios",
+			"label": "Honorarios",
+			"fieldtype": "Section Break",
+			"insert_after": "co_obligaciones",
+			"collapsible": 1,
+		},
+		{
+			"fieldname": "co_honorarios",
+			"label": "Honorarios",
+			"fieldtype": "Table",
+			"options": "Honorario del Cliente",
+			"insert_after": "co_seccion_honorarios",
+			"description": "Lo que se le cobra. Cada mes sale una factura en borrador con lo que toca.",
+		},
 	],
 	"Supplier": [_tercero("supplier_name")],
 	"Company": _de_colombia(
@@ -107,6 +122,40 @@ CAMPOS = {
 			},
 		]
 	),
+	"Sales Invoice": [
+		{
+			"fieldname": "co_periodo_honorarios",
+			"label": "Periodo de honorarios",
+			"fieldtype": "Data",
+			"insert_after": "customer_name",
+			"read_only": 1,
+			"no_copy": 1,
+			"in_standard_filter": 1,
+			"depends_on": "co_periodo_honorarios",
+			"description": "Mes que cobra esta factura (AAAA-MM).",
+		}
+	],
+	"Lead": [
+		{
+			"fieldname": "co_seccion_propuesta",
+			"label": "Propuesta",
+			"fieldtype": "Section Break",
+			"insert_after": "company_name",
+		},
+		{
+			"fieldname": "co_servicios",
+			"label": "Servicios que le interesan",
+			"fieldtype": "Small Text",
+			"insert_after": "co_seccion_propuesta",
+		},
+		{
+			"fieldname": "co_honorario_propuesto",
+			"label": "Honorario mensual propuesto",
+			"fieldtype": "Currency",
+			"insert_after": "co_servicios",
+			"description": "Si se vuelve cliente, pasa a sus honorarios desde el mes siguiente.",
+		},
+	],
 	"Account": [
 		{
 			"fieldname": "co_clasificacion_niif",

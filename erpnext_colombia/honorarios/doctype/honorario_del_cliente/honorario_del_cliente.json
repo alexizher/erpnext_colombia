@@ -1,0 +1,23 @@
+{
+ "actions": [],
+ "creation": "2026-10-19 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["concepto", "valor", "periodicidad", "desde", "hasta"],
+ "fields": [
+  {"fieldname": "concepto", "fieldtype": "Data", "label": "Concepto", "reqd": 1, "in_list_view": 1, "description": "Así sale en la factura, seguido del mes."},
+  {"fieldname": "valor", "fieldtype": "Currency", "label": "Valor", "reqd": 1, "in_list_view": 1, "non_negative": 1},
+  {"default": "Mensual", "fieldname": "periodicidad", "fieldtype": "Select", "options": "Mensual\nBimestral\nTrimestral\nSemestral\nAnual\nUna vez", "label": "Periodicidad", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "desde", "fieldtype": "Date", "label": "Desde", "reqd": 1, "in_list_view": 1, "description": "El primer cobro cae en este mes; los siguientes, cada tanto según la periodicidad."},
+  {"fieldname": "hasta", "fieldtype": "Date", "label": "Hasta", "in_list_view": 1}
+ ],
+ "istable": 1,
+ "modified": "2026-10-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Honorarios",
+ "name": "Honorario del Cliente",
+ "owner": "Administrator",
+ "permissions": [],
+ "states": []
+}
