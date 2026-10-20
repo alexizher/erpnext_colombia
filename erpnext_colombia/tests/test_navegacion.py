@@ -78,3 +78,13 @@ class TestNavegacion(IntegrationTestCase):
 		destinos = {i.link_to for i in frappe.get_doc("Sidebar", "Oficina").items}
 		for destino in ("Honorarios por Cliente", "Configuracion de Honorarios", "Sales Invoice", "Lead"):
 			self.assertIn(destino, destinos)
+
+	def test_modulos_de_la_app_sin_menu_automatico(self):
+		# Su navegación está en Oficina y en Contabilidad; sin esto Frappe arma un menú por módulo
+		# con los nombres de las tablas y se queda con sus pantallas.
+		from frappe.desk.doctype.sidebar.sidebar import get_navigable_modules
+
+		navegables = get_navigable_modules()
+		for modulo in ("Vencimientos", "Honorarios", "ERPNext Colombia"):
+			self.assertNotIn(modulo, navegables)
+		self.assertIn("Oficina", navegables)

@@ -160,6 +160,10 @@ class TestCuentasPorDefecto(IntegrationTestCase):
 		self.assertEqual(self._numero("stock_received_but_not_billed"), "233595")
 		self.assertEqual(self._numero("round_off_account"), "429581")
 
+	def test_ingresos_por_defecto_no_es_cultivo_de_cereales(self):
+		# ERPNext toma la primera cuenta de ingresos del PUC, 410505.
+		self.assertEqual(self._numero("default_income_account"), "415550")
+
 	def test_empresa_nueva_con_puc_sin_inventario_perpetuo(self):
 		self.assertFalse(frappe.db.get_value("Company", self.EMPRESA, "enable_perpetual_inventory"))
 

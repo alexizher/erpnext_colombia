@@ -38,6 +38,9 @@ def configurar():
 	from erpnext_colombia.honorarios import instalacion as honorarios
 
 	honorarios.configurar()
+	from erpnext_colombia.oficina import perfil
+
+	perfil.configurar()
 	from erpnext_colombia.navegacion import agregar_a_contabilidad
 
 	agregar_a_contabilidad()
