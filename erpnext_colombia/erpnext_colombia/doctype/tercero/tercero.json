@@ -9,6 +9,7 @@
   "numero_documento",
   "digito_verificacion",
   "naturaleza",
+  "pais",
   "column_break_ident",
   "nit_completo",
   "nombre_completo",
@@ -26,7 +27,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Tipo de documento",
-   "options": "31 - NIT\n13 - Cédula de ciudadanía\n22 - Cédula de extranjería\n41 - Pasaporte\n42 - Documento de identificación extranjero\n47 - PEP\n48 - PPT\n12 - Tarjeta de identidad",
+   "options": "31 - NIT\n13 - Cédula de ciudadanía\n22 - Cédula de extranjería\n41 - Pasaporte\n42 - Documento de identificación extranjero\n43 - Sin identificación del exterior\n47 - PEP\n48 - PPT\n21 - Tarjeta de extranjería\n12 - Tarjeta de identidad\n11 - Registro civil",
    "reqd": 1
   },
   {
@@ -54,6 +55,15 @@
    "label": "Naturaleza",
    "options": "\nPersona jurídica\nPersona natural",
    "allow_in_quick_entry": 1
+  },
+  {
+   "default": "Colombia",
+   "fieldname": "pais",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "País",
+   "options": "Country",
+   "description": "País de residencia. Con documento 42 o 43, el país del extranjero."
   },
   {
    "fieldname": "column_break_ident",
@@ -123,7 +133,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-07 18:00:00.000000",
+ "modified": "2026-10-19 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Colombia",
  "name": "Tercero",

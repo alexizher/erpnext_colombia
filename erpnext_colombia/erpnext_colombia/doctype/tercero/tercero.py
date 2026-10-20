@@ -4,7 +4,8 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
-from erpnext_colombia.nit import codigo_tipo, digito_verificacion, limpiar_numero
+from erpnext_colombia.nit import DOCUMENTOS_DEL_EXTERIOR, codigo_tipo, digito_verificacion, limpiar_numero
+from erpnext_colombia.pais import PAIS
 
 # "900.123.456-7": el último dígito después de un guion es el de verificación.
 DV_CON_GUION = re.compile(r"^\s*(.*\d)\s*-\s*(\d)\s*$")
@@ -25,6 +26,7 @@ class Tercero(Document):
 			self._validar_digito()
 		else:
 			self.digito_verificacion = None
+		self._validar_pais()
 		self._validar_nombres()
 		self.nombre_completo = self._armar_nombre()
 		self.nit_completo = self._nit_completo()
@@ -96,6 +98,16 @@ class Tercero(Document):
 				)
 			)
 		self.digito_verificacion = calculado
+
+	def _validar_pais(self):
+		if not self.pais:
+			self.pais = PAIS
+		if codigo_tipo(self.tipo_documento) in DOCUMENTOS_DEL_EXTERIOR and self.pais == PAIS:
+			frappe.throw(
+				_("Con el documento {0} el tercero es del exterior: escoja su país.").format(
+					self.tipo_documento
+				)
+			)
 
 	def _validar_nombres(self):
 		if self.naturaleza == "Persona natural":
