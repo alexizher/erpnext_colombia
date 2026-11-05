@@ -306,11 +306,15 @@ doc_events = {
 			"erpnext_colombia.partes.validar_parte",
 			"erpnext_colombia.honorarios.facturacion.validar_cliente",
 		],
-		"on_update": "erpnext_colombia.vencimientos.generacion.al_guardar_cliente",
+		"on_update": [
+			"erpnext_colombia.partes.marcar_propiedad",
+			"erpnext_colombia.vencimientos.generacion.al_guardar_cliente",
+		],
 	},
 	"Supplier": {
 		"before_insert": "erpnext_colombia.partes.antes_de_insertar",
 		"validate": "erpnext_colombia.partes.validar_parte",
+		"on_update": "erpnext_colombia.partes.marcar_propiedad",
 	},
 	"Company": {
 		"validate": "erpnext_colombia.partes.validar_empresa",

@@ -10,6 +10,7 @@
   "digito_verificacion",
   "naturaleza",
   "pais",
+  "tipo_contribuyente",
   "column_break_ident",
   "nit_completo",
   "nombre_completo",
@@ -19,7 +20,29 @@
   "segundo_apellido",
   "column_break_nombres",
   "primer_nombre",
-  "otros_nombres"
+  "otros_nombres",
+  "section_break_responsabilidades",
+  "rf_gran_contribuyente",
+  "rf_autorretenedor",
+  "rf_agente_retencion_iva",
+  "column_break_responsabilidades",
+  "rf_regimen_simple",
+  "rf_no_aplica",
+  "section_break_propiedades",
+  "es_cliente",
+  "es_proveedor",
+  "es_empleado",
+  "es_banco",
+  "column_break_propiedades_4",
+  "es_fondo",
+  "es_aseguradora",
+  "es_socio",
+  "es_transportador",
+  "column_break_propiedades_8",
+  "es_vendedor",
+  "es_trabajador_independiente",
+  "es_admin_impuestos_nacionales",
+  "es_admin_impuestos_distritales"
  ],
  "fields": [
   {
@@ -64,6 +87,14 @@
    "label": "País",
    "options": "Country",
    "description": "País de residencia. Con documento 42 o 43, el país del extranjero."
+  },
+  {
+   "fieldname": "tipo_contribuyente",
+   "fieldtype": "Select",
+   "label": "Tipo de contribuyente",
+   "options": "\nEntidades Sin Ánimo de Lucro\nGrande Contribuyente Autorretenedor\nGrande Contribuyente No Autorretenedor\nInstituciones del Estado Públicos y Otros\nPersona Jurídica\nPersona Jurídica Autorretenedor\nPersona Natural Autorretenedor\nPersona Natural No Responsable del IVA\nPersona Natural o Jurídica Ley 1429\nPersona Natural Responsable del IVA\nPersona Natural Responsable del IVA Agente Retenedor\nProveedor Sociedades de Comercio Internacional\nRégimen Simple de Tributación Persona Jurídica\nRégimen Simple de Tributación Persona Natural\nTercero del Exterior",
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "column_break_ident",
@@ -129,11 +160,122 @@
    "fieldtype": "Data",
    "label": "Otros nombres",
    "allow_in_quick_entry": 1
+  },
+  {
+   "fieldname": "section_break_responsabilidades",
+   "fieldtype": "Section Break",
+   "label": "Responsabilidades fiscales",
+   "description": "Las propone el tipo de contribuyente. Se pueden cambiar a mano."
+  },
+  {
+   "fieldname": "rf_gran_contribuyente",
+   "fieldtype": "Check",
+   "label": "O-13 Gran contribuyente"
+  },
+  {
+   "fieldname": "rf_autorretenedor",
+   "fieldtype": "Check",
+   "label": "O-15 Autorretenedor"
+  },
+  {
+   "fieldname": "rf_agente_retencion_iva",
+   "fieldtype": "Check",
+   "label": "O-23 Agente de retención IVA"
+  },
+  {
+   "fieldname": "column_break_responsabilidades",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rf_regimen_simple",
+   "fieldtype": "Check",
+   "label": "O-47 Régimen simple de tributación"
+  },
+  {
+   "fieldname": "rf_no_aplica",
+   "fieldtype": "Check",
+   "label": "R-99-PN No aplica, otros"
+  },
+  {
+   "fieldname": "section_break_propiedades",
+   "fieldtype": "Section Break",
+   "label": "Propiedades activas",
+   "description": "Al guardar con Cliente o Proveedor marcado se crea el cliente o el proveedor si no existe."
+  },
+  {
+   "fieldname": "es_cliente",
+   "fieldtype": "Check",
+   "label": "Cliente",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "es_proveedor",
+   "fieldtype": "Check",
+   "label": "Proveedor",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "es_empleado",
+   "fieldtype": "Check",
+   "label": "Empleado"
+  },
+  {
+   "fieldname": "es_banco",
+   "fieldtype": "Check",
+   "label": "Banco"
+  },
+  {
+   "fieldname": "column_break_propiedades_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "es_fondo",
+   "fieldtype": "Check",
+   "label": "Fondo"
+  },
+  {
+   "fieldname": "es_aseguradora",
+   "fieldtype": "Check",
+   "label": "Aseguradora"
+  },
+  {
+   "fieldname": "es_socio",
+   "fieldtype": "Check",
+   "label": "Socio"
+  },
+  {
+   "fieldname": "es_transportador",
+   "fieldtype": "Check",
+   "label": "Transportador"
+  },
+  {
+   "fieldname": "column_break_propiedades_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "es_vendedor",
+   "fieldtype": "Check",
+   "label": "Vendedor"
+  },
+  {
+   "fieldname": "es_trabajador_independiente",
+   "fieldtype": "Check",
+   "label": "Trabajador independiente"
+  },
+  {
+   "fieldname": "es_admin_impuestos_nacionales",
+   "fieldtype": "Check",
+   "label": "Administrador de impuestos nacionales"
+  },
+  {
+   "fieldname": "es_admin_impuestos_distritales",
+   "fieldtype": "Check",
+   "label": "Administrador de impuestos distritales"
   }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-19 20:00:00.000000",
+ "modified": "2026-11-04 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Colombia",
  "name": "Tercero",

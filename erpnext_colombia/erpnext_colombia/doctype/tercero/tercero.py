@@ -4,6 +4,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
+from erpnext_colombia.contribuyente import aplica_a, responsabilidades_de, tipo_por_defecto
 from erpnext_colombia.nit import DOCUMENTOS_DEL_EXTERIOR, codigo_tipo, digito_verificacion, limpiar_numero
 from erpnext_colombia.pais import PAIS
 
@@ -27,12 +28,14 @@ class Tercero(Document):
 		else:
 			self.digito_verificacion = None
 		self._validar_pais()
+		self._validar_tipo_contribuyente()
 		self._validar_nombres()
 		self.nombre_completo = self._armar_nombre()
 		self.nit_completo = self._nit_completo()
 
 	def on_update(self):
 		self._propagar_nit()
+		self._crear_partes()
 
 	def before_rename(self, old, new, merge=False):
 		numero = new
@@ -58,15 +61,17 @@ class Tercero(Document):
 		self._propagar_nit()
 
 	def _preparar_numero(self):
-		if codigo_tipo(self.tipo_documento) == "31" and (m := DV_CON_GUION.match(self.numero_documento or "")):
+		if codigo_tipo(self.tipo_documento) == "31" and (
+			m := DV_CON_GUION.match(self.numero_documento or "")
+		):
 			numero, dv = m.groups()
 			if self.digito_verificacion in (None, ""):
 				self.digito_verificacion = dv
 			elif str(self.digito_verificacion) != dv:
 				frappe.throw(
-					_("El número trae el dígito {0} después del guion y el campo dígito de verificación dice {1}.").format(
-						dv, self.digito_verificacion
-					)
+					_(
+						"El número trae el dígito {0} después del guion y el campo dígito de verificación dice {1}."
+					).format(dv, self.digito_verificacion)
 				)
 			self.numero_documento = numero
 		self.numero_documento = limpiar_numero(self.numero_documento, self.tipo_documento)
@@ -108,6 +113,28 @@ class Tercero(Document):
 					self.tipo_documento
 				)
 			)
+
+	def _validar_tipo_contribuyente(self):
+		if not self.tipo_contribuyente:
+			del_exterior = codigo_tipo(self.tipo_documento) in DOCUMENTOS_DEL_EXTERIOR
+			self.tipo_contribuyente = tipo_por_defecto(self.naturaleza, del_exterior)
+		if not aplica_a(self.tipo_contribuyente, self.naturaleza):
+			frappe.throw(
+				_("El tipo de contribuyente {0} no aplica a una {1}.").format(
+					self.tipo_contribuyente, self.naturaleza.lower()
+				)
+			)
+		# El tipo propone; lo que Daniela marque a mano se queda mientras el tipo no cambie.
+		if self.is_new() or self.has_value_changed("tipo_contribuyente"):
+			self.update(responsabilidades_de(self.tipo_contribuyente))
+
+	def _crear_partes(self):
+		from erpnext_colombia.partes import crear_parte
+
+		if self.es_cliente:
+			crear_parte("Customer", self.name)
+		if self.es_proveedor:
+			crear_parte("Supplier", self.name)
 
 	def _validar_nombres(self):
 		if self.naturaleza == "Persona natural":
