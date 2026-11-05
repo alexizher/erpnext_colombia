@@ -167,3 +167,14 @@ CAMPOS = {
 		}
 	],
 }
+
+
+# El formulario exige el nombre antes de guardar; así se llena apenas se escoge el tercero.
+PROPIEDADES = [
+	(doctype, campo, propiedad, valor, tipo)
+	for doctype, campo in (("Customer", "customer_name"), ("Supplier", "supplier_name"))
+	for propiedad, valor, tipo in (
+		("fetch_from", "co_tercero.nombre_completo", "Small Text"),
+		("fetch_if_empty", "1", "Check"),
+	)
+]

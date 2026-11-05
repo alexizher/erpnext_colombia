@@ -3,8 +3,9 @@ from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	make_dimension_in_accounting_doctypes,
 )
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
-from erpnext_colombia.campos import CAMPOS
+from erpnext_colombia.campos import CAMPOS, PROPIEDADES
 
 
 def after_install():
@@ -17,6 +18,8 @@ def after_migrate():
 
 def configurar():
 	create_custom_fields(CAMPOS, update=True)
+	for doctype, campo, propiedad, valor, tipo in PROPIEDADES:
+		make_property_setter(doctype, campo, propiedad, valor, tipo, validate_fields_for_doctype=False)
 	crear_dimension()
 	from erpnext_colombia import cuentas
 

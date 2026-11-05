@@ -158,3 +158,11 @@ class TestParche(ConTercerosLimpios):
 		self.assertEqual(viejo.tipo_contribuyente, "Persona Jurídica")
 		self.assertEqual(viejo.es_cliente, 1)
 		self.assertEqual(marcadas(viejo), ["rf_no_aplica"])
+
+
+class TestNombreDesdeElTercero(IntegrationTestCase):
+	def test_el_formulario_trae_el_nombre_del_tercero(self):
+		for doctype, campo in (("Customer", "customer_name"), ("Supplier", "supplier_name")):
+			df = frappe.get_meta(doctype).get_field(campo)
+			self.assertEqual(df.fetch_from, "co_tercero.nombre_completo", doctype)
+			self.assertEqual(df.fetch_if_empty, 1, doctype)
