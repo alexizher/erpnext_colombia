@@ -49,6 +49,12 @@ class TestVistas(IntegrationTestCase):
 		tablero = frappe.get_doc("Dashboard", "Vencimientos")
 		self.assertEqual([c.card for c in tablero.cards], list(tarjetas))
 
+	def test_terceros_clientes_y_proveedores_juntos_en_la_barra(self):
+		barra = frappe.get_doc("Sidebar", "Oficina")
+		destinos = [i.link_to for i in barra.items if i.link_type == "DocType"]
+		inicio = destinos.index("Tercero")
+		self.assertEqual(destinos[inicio : inicio + 3], ["Tercero", "Customer", "Supplier"])
+
 	def test_la_barra_abre_en_la_misma_pestana(self):
 		barra = frappe.get_doc("Sidebar", "Oficina")
 		self.assertEqual([i.label for i in barra.items if i.open_in_new_tab], [])
