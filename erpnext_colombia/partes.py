@@ -6,6 +6,7 @@ TIPO_ERPNEXT = {"Persona jurídica": "Company", "Persona natural": "Individual"}
 CAMPO_NOMBRE = {"Customer": "customer_name", "Supplier": "supplier_name"}
 CAMPO_TIPO = {"Customer": "customer_type", "Supplier": "supplier_type"}
 NOMBRE_PARTE = {"Customer": _("cliente"), "Supplier": _("proveedor")}
+PROPIEDAD = {"Customer": "es_cliente", "Supplier": "es_proveedor"}
 
 
 def tercero_de(doctype: str, nombre: str) -> str | None:
@@ -55,3 +56,30 @@ def _validar_obligaciones(doc):
 def validar_empresa(doc, method=None):
 	if doc.get("co_tercero"):
 		doc.tax_id = frappe.db.get_value("Tercero", doc.co_tercero, "nit_completo")
+
+
+def _grupo(doctype: str, configuracion: str, campo: str) -> str | None:
+	"""El grupo por defecto de la configuración de ventas o compras; si no hay, el primero que no es grupo padre."""
+	return frappe.db.get_single_value(configuracion, campo) or frappe.db.get_value(
+		doctype, {"is_group": 0}, "name", order_by="lft"
+	)
+
+
+def crear_parte(doctype: str, tercero: str) -> None:
+	"""Crea el cliente o el proveedor del tercero si todavía no existe."""
+	if frappe.db.exists(doctype, {"co_tercero": tercero}):
+		return
+	parte = frappe.new_doc(doctype)
+	parte.co_tercero = tercero
+	if doctype == "Customer":
+		parte.customer_group = _grupo("Customer Group", "Selling Settings", "customer_group")
+		parte.territory = _grupo("Territory", "Selling Settings", "territory")
+	else:
+		parte.supplier_group = _grupo("Supplier Group", "Buying Settings", "supplier_group")
+	parte.insert()
+
+
+def marcar_propiedad(doc, method=None):
+	"""Un cliente o proveedor creado por su lado deja marcada la propiedad en su tercero."""
+	if doc.get("co_tercero"):
+		frappe.db.set_value("Tercero", doc.co_tercero, PROPIEDAD[doc.doctype], 1, update_modified=False)
