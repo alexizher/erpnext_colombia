@@ -26,6 +26,8 @@ def preparar_sitio():
 			).insert()
 	frappe.db.set_single_value("Selling Settings", "selling_price_list", "Standard Selling")
 	frappe.db.set_single_value("Buying Settings", "buying_price_list", "Standard Buying")
+	frappe.db.set_single_value("Selling Settings", "customer_group", GRUPO_CLIENTE)
+	frappe.db.set_single_value("Buying Settings", "supplier_group", GRUPO_PROVEEDOR)
 	frappe.db.commit()
 
 

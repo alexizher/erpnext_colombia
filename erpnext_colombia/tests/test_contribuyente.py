@@ -2,7 +2,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from erpnext_colombia.contribuyente import tipos_de
-from erpnext_colombia.tests.utils import GRUPO_CLIENTE, TERRITORIO
+from erpnext_colombia.tests.utils import GRUPO_CLIENTE, GRUPO_PROVEEDOR, TERRITORIO
 
 NUMEROS = [
 	"901000700",
@@ -127,6 +127,20 @@ class TestPropiedadesActivas(ConTercerosLimpios):
 		t = tercero(numero_documento="901000755", es_proveedor=1).insert()
 		t.save()
 		self.assertEqual(frappe.db.count("Supplier", {"co_tercero": t.name}), 1)
+
+	def test_el_cliente_creado_queda_en_colombia_y_en_el_grupo_por_defecto(self):
+		t = tercero(numero_documento="901000744", es_cliente=1).insert()
+		cliente = frappe.db.get_value("Customer", {"co_tercero": t.name}, ["customer_group", "territory"], as_dict=True)
+		self.assertEqual(cliente.customer_group, GRUPO_CLIENTE)
+		self.assertEqual(cliente.territory, "Colombia")
+
+	def test_sin_grupo_por_defecto_avisa_en_vez_de_adivinar(self):
+		frappe.db.set_single_value("Buying Settings", "supplier_group", None)
+		try:
+			with self.assertRaisesRegex(frappe.ValidationError, "grupo de proveedores"):
+				tercero(numero_documento="901000755", es_proveedor=1).insert()
+		finally:
+			frappe.db.set_single_value("Buying Settings", "supplier_group", GRUPO_PROVEEDOR)
 
 	def test_desmarcar_no_borra_el_cliente(self):
 		t = tercero(numero_documento="901000744", es_cliente=1).insert()
