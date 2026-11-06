@@ -7,7 +7,7 @@ Localización colombiana para ERPNext: PUC, terceros, impuestos, DIAN y exógena
 - **Oficina**, en la barra de íconos de ERPNext: el tablero de vencimientos, los vencimientos, los clientes, el reporte por cliente, los honorarios (facturas y reporte por cliente), los prospectos y, en Configuración, las fechas tributarias, las obligaciones y la configuración de vencimientos y de honorarios.
 - **Contabilidad → Terceros y NIIF**, al final del menú: los terceros, los estados financieros de los grupos 2 y 3 (cada uno abierto con su plantilla), el balance de prueba por tercero y el auxiliar por tercero.
 
-Para quien lleva la oficina hay una vista corta: en su ficha de usuario se le pone el perfil de módulos **Oficina contable**. El menú queda solo con Oficina y Contabilidad, la barra de íconos con Oficina primero, y al entrar llega al tablero de la oficina. Es solo navegación: sus permisos no cambian, y lo que esté en otro módulo se abre igual desde un enlace o desde Buscar. Quitar el perfil devuelve la vista completa.
+Para quien lleva la oficina hay una vista corta: en su ficha de usuario se le pone el perfil de módulos **Oficina contable**. El menú queda con Oficina, Contabilidad, Proyectos y CRM, la barra de íconos con esos cuatro y Oficina primero, y al entrar llega al tablero de la oficina. Es solo navegación: sus permisos no cambian, y lo que esté en otro módulo se abre igual desde un enlace o desde Buscar. Quitar el perfil devuelve la vista completa.
 
 Las reglas contables (tercero obligatorio en las cuentas 13 y 22 a 25, clasificación NIIF, tercero en facturas, pagos y asientos) aplican solo a las empresas con país Colombia que usan el PUC. Los campos de tercero y certificación de la Ley 222 solo aparecen en la ficha de una empresa colombiana.
 

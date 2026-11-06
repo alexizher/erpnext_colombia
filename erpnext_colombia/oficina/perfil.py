@@ -2,9 +2,10 @@
 
 Se asigna con el perfil de módulos "Oficina contable" en la ficha del usuario. Con él:
 
-- el menú oculta los módulos que no son de la oficina ni de la contabilidad. Es solo navegación:
-  los permisos siguen siendo los de sus roles, y un cliente o un artículo se abre igual;
-- la barra de íconos queda con Oficina primero y Contabilidad después;
+- el menú oculta los módulos que no son de la oficina, la contabilidad, los proyectos o el CRM.
+  Es solo navegación: los permisos siguen siendo los de sus roles, y un cliente o un artículo se
+  abre igual;
+- la barra de íconos queda con Oficina, Contabilidad, Proyectos y CRM, en ese orden;
 - al entrar llega al tablero de la oficina.
 
 Quitar el perfil devuelve la vista completa.
@@ -18,16 +19,29 @@ PERFIL = "Oficina contable"
 APP = "erpnext_colombia"
 RIEL = "erpnext"
 RUTA_INICIO = "/desk/dashboard-view/Vencimientos"
-MODULOS_VISIBLES = frozenset({"Oficina", "Accounts", "ERPNext Colombia", "Vencimientos", "Honorarios"})
+MODULOS_VISIBLES = frozenset(
+	{"Oficina", "Accounts", "ERPNext Colombia", "Vencimientos", "Honorarios", "Projects", "CRM"}
+)
 # El título del ícono no pasa por la traducción: sin él diría "Accounts".
 BARRA = (
 	{"link_type": "Sidebar", "link_to": "Oficina"},
 	{"link_type": "Sidebar", "link_to": "Accounts", "title": "Contabilidad"},
+	{"link_type": "Sidebar", "link_to": "Projects", "title": "Proyectos"},
+	{"link_type": "Sidebar", "link_to": "CRM", "title": "CRM"},
 )
 
 
 def configurar() -> None:
-	"""Crea o pone al día el perfil. Un módulo nuevo de cualquier app queda oculto también."""
+	"""Crea o pone al día el perfil y la barra de quienes lo tienen.
+
+	Un módulo nuevo de cualquier app queda oculto también.
+	"""
+	_configurar_modulos()
+	for usuario in frappe.get_all("User", filters={"module_profile": PERFIL}, pluck="name"):
+		_save_layer(RIEL, list(BARRA), user=usuario, require_visible=False)
+
+
+def _configurar_modulos() -> None:
 	bloquear = [m for m in get_blockable_module_names() if m not in MODULOS_VISIBLES]
 	if frappe.db.exists("Module Profile", PERFIL):
 		perfil = frappe.get_doc("Module Profile", PERFIL)
