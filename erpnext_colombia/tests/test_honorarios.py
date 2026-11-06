@@ -158,7 +158,7 @@ class TestFacturacionDeHonorarios(IntegrationTestCase):
 		self.assertEqual(len(facturas_de(self.a, "2026-09")), 1)
 
 	def test_cancelada_no_se_vuelve_a_crear(self):
-		# Si Daniela cancela la de un mes, es porque ese mes no se cobra.
+		# Si el contador cancela la de un mes, es porque ese mes no se cobra.
 		self.facturar(Periodo(2026, 9), hoy=d(2026, 9, 5))
 		[fa] = facturas_de(self.a, "2026-09")
 		doc = frappe.get_doc("Sales Invoice", fa.name)

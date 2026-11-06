@@ -1,7 +1,8 @@
 """Tipo de contribuyente y responsabilidades fiscales del tercero.
 
-La lista de tipos es la del programa contable que Daniela usaba. Las responsabilidades son las que
-pide la factura electrónica de la DIAN; el tipo las propone y Daniela las puede cambiar a mano.
+La lista de tipos sigue la clasificación usual de los programas contables en Colombia. Las
+responsabilidades son las que pide la factura electrónica de la DIAN; el tipo las propone y el
+contador las puede cambiar a mano.
 """
 
 import frappe

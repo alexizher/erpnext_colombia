@@ -124,7 +124,7 @@ class Tercero(Document):
 					self.tipo_contribuyente, self.naturaleza.lower()
 				)
 			)
-		# El tipo propone; lo que Daniela marque a mano se queda mientras el tipo no cambie.
+		# El tipo propone; lo que el contador marque a mano se queda mientras el tipo no cambie.
 		if self.is_new() or self.has_value_changed("tipo_contribuyente"):
 			self.update(responsabilidades_de(self.tipo_contribuyente))
 

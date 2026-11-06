@@ -21,7 +21,7 @@ El **balance de prueba por tercero** da por cuenta y tercero el saldo inicial, l
 
 ### Honorarios
 
-En la ficha del cliente, sección "Honorarios", se anota lo que se le cobra: concepto, valor, periodicidad (mensual, bimestral, trimestral, semestral, anual o una vez) y desde cuándo. Desde el día de facturación de cada mes, la app crea una factura de venta en borrador por cliente con lo que toca ese mes. Daniela la revisa y la envía. Un mes ya facturado no se vuelve a generar, aunque su factura se cancele.
+En la ficha del cliente, sección "Honorarios", se anota lo que se le cobra: concepto, valor, periodicidad (mensual, bimestral, trimestral, semestral, anual o una vez) y desde cuándo. Desde el día de facturación de cada mes, la app crea una factura de venta en borrador por cliente con lo que toca ese mes. El contador la revisa y la envía. Un mes ya facturado no se vuelve a generar, aunque su factura se cancele.
 
 Se configura en "Configuración de honorarios": empresa que factura, artículo (la app crea "HONORARIOS"), plantilla de impuestos, día de facturación y días para pagar. El botón "Generar las facturas de este mes" no espera al día de facturación. El reporte "Honorarios por cliente" muestra lo facturado, lo pagado, el saldo y desde cuándo debe cada uno.
 

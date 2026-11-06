@@ -56,8 +56,8 @@ class TestTercero(IntegrationTestCase):
 			numero_documento="1030567897",
 			razon_social=None,
 			naturaleza="Persona natural",
-			primer_apellido="Molina",
-			primer_nombre="Daniela",
+			primer_apellido="Pérez",
+			primer_nombre="Ana",
 		).insert()
 		self.assertEqual(t.name, "1030567897")
 
@@ -100,13 +100,13 @@ class TestTercero(IntegrationTestCase):
 			tipo_documento="13 - Cédula de ciudadanía",
 			numero_documento="1.030.567.811",
 			razon_social=None,
-			primer_apellido="Molina",
-			segundo_apellido="Rojas",
-			primer_nombre="Daniela",
+			primer_apellido="Pérez",
+			segundo_apellido="Gómez",
+			primer_nombre="Ana",
 			otros_nombres="",
 		).insert()
 		self.assertEqual(t.naturaleza, "Persona natural")
-		self.assertEqual(t.nombre_completo, "Daniela Molina Rojas")
+		self.assertEqual(t.nombre_completo, "Ana Pérez Gómez")
 		self.assertFalse(t.digito_verificacion)
 		self.assertEqual(t.nit_completo, "1030567811")
 
