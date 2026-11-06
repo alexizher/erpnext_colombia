@@ -26,7 +26,7 @@ class TestTraducciones(IntegrationTestCase):
 		frappe.local.lang_full_dict = None
 
 	def test_saludo_del_inicio(self):
-		self.assertEqual(_("Good morning, {0}").format("Daniela"), "Buenos días, Daniela")
+		self.assertEqual(_("Good morning, {0}").format("Ana"), "Buenos días, Ana")
 		self.assertEqual(_("{0} of {1} steps done").format(2, 9), "2 de 9 pasos hechos")
 
 	def test_pantalla_de_entrada(self):

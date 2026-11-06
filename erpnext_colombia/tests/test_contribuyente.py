@@ -32,8 +32,8 @@ def persona(numero="1030567700", **campos):
 		tipo_documento="13 - Cédula de ciudadanía",
 		numero_documento=numero,
 		razon_social=None,
-		primer_apellido="Molina",
-		primer_nombre="Daniela",
+		primer_apellido="Pérez",
+		primer_nombre="Ana",
 		**campos,
 	)
 

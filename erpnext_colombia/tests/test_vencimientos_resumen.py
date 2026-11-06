@@ -53,9 +53,9 @@ class TestResumen(IntegrationTestCase):
 	def test_resumen_sin_responsable_va_a_los_correos_de_alerta(self):
 		frappe.db.set_single_value(
 			"Configuracion de Vencimientos",
-			{"responsable": None, "correos_alerta_dian": "alerta1@repolite.link\nalerta2@repolite.link"},
+			{"responsable": None, "correos_alerta_dian": "alerta1@example.com\nalerta2@example.com"},
 		)
-		self.assertEqual(resumen.destinatarios(), ["alerta1@repolite.link", "alerta2@repolite.link"])
+		self.assertEqual(resumen.destinatarios(), ["alerta1@example.com", "alerta2@example.com"])
 
 	def test_resumen_sin_a_quien_no_sale_a_un_correo_de_ejemplo(self):
 		frappe.db.set_single_value(

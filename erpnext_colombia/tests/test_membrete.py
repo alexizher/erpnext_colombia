@@ -14,7 +14,7 @@ class TestMembrete(IntegrationTestCase):
 		doc.co_tercero = nuevo_tercero("900123456", "Empresa Prueba CO S.A.S.")
 		doc.co_representante_legal = "Ana Pérez"
 		doc.co_representante_legal_documento = "CC 43123456"
-		doc.co_contador = "Daniela Molina"
+		doc.co_contador = "Ana Pérez"
 		doc.co_contador_tarjeta_profesional = "123456-T"
 		doc.co_revisor_fiscal = ""
 		doc.save()
@@ -55,11 +55,11 @@ class TestMembrete(IntegrationTestCase):
 
 	def test_nombres_con_html_se_escapan(self):
 		doc = frappe.get_doc("Company", self.empresa)
-		doc.co_contador = "<script>x</script>Daniela"
+		doc.co_contador = "<script>x</script>Ana"
 		doc.save()
 		try:
 			lh = frappe.get_doc("Letter Head", nombre_membrete(self.empresa))
 			self.assertNotIn("<script>", lh.footer)
 		finally:
-			doc.co_contador = "Daniela Molina"
+			doc.co_contador = "Ana Pérez"
 			doc.save()
