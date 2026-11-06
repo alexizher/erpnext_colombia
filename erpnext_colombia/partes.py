@@ -2,6 +2,8 @@ import frappe
 from frappe import _
 from frappe.utils import getdate
 
+from erpnext_colombia.pais import PAIS
+
 TIPO_ERPNEXT = {"Persona jurídica": "Company", "Persona natural": "Individual"}
 CAMPO_NOMBRE = {"Customer": "customer_name", "Supplier": "supplier_name"}
 CAMPO_TIPO = {"Customer": "customer_type", "Supplier": "supplier_type"}
@@ -58,11 +60,21 @@ def validar_empresa(doc, method=None):
 		doc.tax_id = frappe.db.get_value("Tercero", doc.co_tercero, "nit_completo")
 
 
-def _grupo(doctype: str, configuracion: str, campo: str) -> str | None:
-	"""El grupo por defecto de la configuración de ventas o compras; si no hay, el primero que no es grupo padre."""
-	return frappe.db.get_single_value(configuracion, campo) or frappe.db.get_value(
-		doctype, {"is_group": 0}, "name", order_by="lft"
-	)
+def _por_defecto(configuracion: str, campo: str, etiqueta: str) -> str:
+	"""Grupo o territorio por defecto de Ventas o Compras. Sin él no se adivina: escoger uno al azar
+	deja clientes en "Government" o "Rest Of The World"."""
+	valor = frappe.db.get_single_value(configuracion, campo)
+	if campo == "territory" and not valor and frappe.db.exists("Territory", PAIS):
+		valor = PAIS
+	if not valor:
+		frappe.throw(
+			_("Para crear el {0} desde el tercero, escoja {1} por defecto en {2}.").format(
+				_("cliente") if configuracion == "Selling Settings" else _("proveedor"),
+				etiqueta,
+				_("Configuración de ventas") if configuracion == "Selling Settings" else _("Configuración de compras"),
+			)
+		)
+	return valor
 
 
 def crear_parte(doctype: str, tercero: str) -> None:
@@ -72,10 +84,10 @@ def crear_parte(doctype: str, tercero: str) -> None:
 	parte = frappe.new_doc(doctype)
 	parte.co_tercero = tercero
 	if doctype == "Customer":
-		parte.customer_group = _grupo("Customer Group", "Selling Settings", "customer_group")
-		parte.territory = _grupo("Territory", "Selling Settings", "territory")
+		parte.customer_group = _por_defecto("Selling Settings", "customer_group", _("el grupo de clientes"))
+		parte.territory = _por_defecto("Selling Settings", "territory", _("el territorio"))
 	else:
-		parte.supplier_group = _grupo("Supplier Group", "Buying Settings", "supplier_group")
+		parte.supplier_group = _por_defecto("Buying Settings", "supplier_group", _("el grupo de proveedores"))
 	parte.insert()
 
 
