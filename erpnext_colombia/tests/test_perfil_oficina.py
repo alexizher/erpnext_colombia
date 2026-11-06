@@ -34,9 +34,14 @@ class TestPerfilOficina(IntegrationTestCase):
 
 	def test_perfil_oculta_lo_que_no_es_de_la_oficina(self):
 		bloqueados = {f.module for f in frappe.get_doc("Module Profile", PERFIL).block_modules}
-		for modulo in ("Stock", "Manufacturing", "Projects", "Website", "Selling", "Buying"):
+		for modulo in ("Stock", "Manufacturing", "Website", "Selling", "Buying"):
 			self.assertIn(modulo, bloqueados)
 		self.assertFalse(bloqueados & MODULOS_VISIBLES)
+
+	def test_proyectos_y_crm_quedan_visibles(self):
+		bloqueados = {f.module for f in frappe.get_doc("Module Profile", PERFIL).block_modules}
+		self.assertNotIn("Projects", bloqueados)
+		self.assertNotIn("CRM", bloqueados)
 
 	def test_al_asignar_el_perfil_entra_por_oficina(self):
 		u = usuario(CORREO, PERFIL)
@@ -46,13 +51,30 @@ class TestPerfilOficina(IntegrationTestCase):
 
 		self.assertEqual(get_route("erpnext_colombia"), RUTA_INICIO)
 
-	def test_su_barra_tiene_oficina_y_contabilidad(self):
+	def test_su_barra_tiene_oficina_contabilidad_proyectos_y_crm(self):
 		from frappe.desk.doctype.dock.dock import resolve_app_dock
 
 		usuario(CORREO, PERFIL)
 		frappe.set_user(CORREO)
 		riel = [(e["link_to"], e["title"]) for e in resolve_app_dock("erpnext") if not e.get("hidden")]
-		self.assertEqual(riel, [("Oficina", "Oficina"), ("Accounts", "Contabilidad")])
+		self.assertEqual(
+			riel,
+			[("Oficina", "Oficina"), ("Accounts", "Contabilidad"), ("Projects", "Proyectos"), ("CRM", "CRM")],
+		)
+
+	def test_migrar_pone_al_dia_la_barra_de_quien_ya_tenia_el_perfil(self):
+		from frappe.desk.doctype.dock.dock import _save_layer, resolve_app_dock
+
+		from erpnext_colombia.oficina import perfil
+
+		usuario(CORREO, PERFIL)
+		_save_layer(
+			"erpnext", [{"link_type": "Sidebar", "link_to": "Oficina"}], user=CORREO, require_visible=False
+		)
+		perfil.configurar()
+		frappe.set_user(CORREO)
+		riel = [e["link_to"] for e in resolve_app_dock("erpnext") if not e.get("hidden")]
+		self.assertEqual(riel, ["Oficina", "Accounts", "Projects", "CRM"])
 
 	def test_oficina_conserva_clientes_y_prospectos(self):
 		from frappe.desk.doctype.sidebar.sidebar import resolve_sidebar
