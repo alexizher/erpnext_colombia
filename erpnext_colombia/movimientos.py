@@ -11,7 +11,7 @@ PARTES_CON_TERCERO = ("Customer", "Supplier")
 def completar_tercero(doc, method=None):
 	"""El tercero de una factura, un pago o una línea con cliente/proveedor es siempre el de esa parte.
 
-	Se reemplaza en cada validación, no solo cuando está vacío: si Daniela cambia el cliente de un
+	Se reemplaza en cada validación, no solo cuando está vacío: si el usuario cambia el cliente de un
 	borrador, o duplica un documento y cambia la parte, el tercero viejo no debe quedarse.
 	"""
 	if not es_colombiana(doc.company):

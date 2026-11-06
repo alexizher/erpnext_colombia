@@ -72,7 +72,7 @@ def aplicar_a_empresa(empresa: str) -> None:
 			if valor:
 				frappe.db.set_value("Account", c.name, "co_clasificacion_niif", valor, update_modified=False)
 	# El filtro se arma completo solo la primera vez. Después lo mantiene al_crear_cuenta, y las
-	# cuentas que Daniela quite no vuelven a entrar en cada migración.
+	# cuentas que el contador quite no vuelven a entrar en cada migración.
 	if not frappe.db.exists("Accounting Dimension Filter", {"company": empresa, "accounting_dimension": DIMENSION}):
 		_asegurar_filtro(empresa, [c.name for c in cuentas if exige_tercero(c.account_number)])
 

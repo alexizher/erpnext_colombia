@@ -11,9 +11,9 @@ CONFIGURACION = "Configuracion de Honorarios"
 
 
 class Facturador:
-	"""Crea una factura en borrador por cliente y mes. Daniela la revisa y la envía.
+	"""Crea una factura en borrador por cliente y mes. El contador la revisa y la envía.
 
-	Un mes ya facturado no se repite, aunque su factura esté cancelada: si Daniela la cancela es porque
+	Un mes ya facturado no se repite, aunque su factura esté cancelada: si el contador la cancela es porque
 	ese mes no se cobra, y para corregirla la enmienda (la enmienda conserva el periodo).
 	"""
 
